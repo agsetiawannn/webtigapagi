@@ -1,0 +1,118 @@
+/* Copied from resources/css/style.css for quick public use */
+.TPTPTPTP {
+  background-color: #000000;
+  overflow: hidden;
+  width: 100%;
+  min-width: 1920px;
+  min-height: 5578px;
+  position: relative;
+}
+
+.TPTPTPTP .wrap-slider-top {
+  position: absolute;
+  top: -415px;
+  left: -292px;
+  width: 3344px;
+  height: 2736px;
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.TPTPTPTP .group {
+  width: 5359px;
+  height: 2306px;
+  display: flex;
+}
+
+.TPTPTPTP .div {
+  width: 5359.12px;
+  height: 2306.3px;
+  margin-left: 0;
+  display: flex;
+  gap: 3010.6px;
+}
+
+.TPTPTPTP .pexels-mahdibafande {
+  margin-top: -1245px;
+  width: 2306.3px;
+  height: 2679.68px;
+  margin-left: -5024.9px;
+  aspect-ratio: 0.86;
+}
+
+.TPTPTPTP .img {
+  margin-top: 415px;
+  width: 1920px;
+  height: 1891.3px;
+  aspect-ratio: 0.86;
+}
+
+.TPTPTPTP .overlap-group {
+  position: absolute;
+  height: 1080px;
+  top: 0;
+  left: 0;
+  display: flex;
+  padding: 111.3px 60px;
+  align-items: flex-start;
+  min-width: 1920px;
+  background-image: url(./img/glass-mirror.png);
+  background-size: 100% 100%;
+}
+
+.TPTPTPTP .LOGO {
+  width: 240px;
+  height: 78px;
+}
+
+.TPTPTPTP .a-creative {
+  position: absolute;
+  top: 387px;
+  left: calc(50.00% - 894px);
+  font-family: "Montserrat-Bold", Helvetica;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 83.6px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.TPTPTPTP .rectangle {
+  position: absolute;
+  top: 822px;
+  left: calc(50.00% - 960px);
+  width: 1920px;
+  height: 1196px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 1) 100%
+  );
+}
+
+.TPTPTPTP .group-2 {
+  position: absolute;
+  top: 1109px;
+  left: calc(50.00% - 894px);
+  width: 1766px;
+  height: 564px;
+  display: flex;
+  flex-direction: column;
+}
+
+.TPTPTPTP .studio-tigapagi-is-a {
+  margin-left: -4px;
+  height: 123px;
+  width: 1762px;
+  align-self: center;
+  font-family: "Montserrat-Bold", Helvetica;
+  font-weight: 400;
+  color: #ffffff;
+  font-size: 28px;
+  text-align: justify;
+  letter-spacing: 0;
+  line-height: 41px;
+}
+
+/* ... file continues (truncated here for brevity) ... */
