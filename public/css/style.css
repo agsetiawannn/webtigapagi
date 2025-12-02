@@ -1,118 +1,379 @@
-/* Copied from resources/css/style.css for quick public use */
-.TPTPTPTP {
-  background-color: #000000;
-  overflow: hidden;
-  width: 100%;
-  min-width: 1920px;
-  min-height: 5578px;
-  position: relative;
+/*
+====================================
+STYLESHEET UTAMA - TIGAPAGI WEB
+====================================
+
+Daftar Isi:
+1. Variabel Global
+2. Gaya Dasar & Body
+3. Hero Section
+4. Lapisan Latar Hero
+5. Kontainer Utama
+6. Logo & Kontrol Atas
+7. Tombol & Navigasi
+8. Tipografi
+9. Animasi
+10. Section Works / Services
+11. Media Queries (Responsive)
+
+*/
+
+/* === 1. VARIABEL GLOBAL === */
+/* Variabel ini digunakan untuk warna dasar di seluruh situs. */
+:root{ --bg:#000; --text:#fff; --muted:#bdbdbd; --primary:#fff; }
+
+/* === 2. GAYA DASAR & BODY === */
+/* Mengatur ulang margin, font default, dan warna latar untuk seluruh halaman. */
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial, sans-serif;background:var(--bg);color:var(--text)}
+
+/* === 3. HERO SECTION === */
+/* Gaya untuk area utama (paling atas) di halaman. */
+.hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    text-align: center;
+    padding:72px 48px;
+    box-sizing:border-box;
+    overflow:hidden;
 }
 
-.TPTPTPTP .wrap-slider-top {
-  position: absolute;
-  top: -415px;
-  left: -292px;
-  width: 3344px;
-  height: 2736px;
-  display: flex;
-  align-items: flex-start;
-  overflow: hidden;
+/* --- Gradasi Baru Ditambahkan Di Sini --- */
+/* Gradasi ini memberikan efek gelap di bagian atas dan bawah hero section,
+   agar teks lebih mudah terbaca di atas gambar latar. */
+
+/* Gradasi Vertikal (Atas) */
+.hero-gradient-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 300px; /* Tinggi zona gradasi */
+    z-index: 5; /* Pastikan di atas gambar latar belakang */
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 0.4) 30%,
+        rgba(0, 0, 0, 0) 100%
+    );
+    pointer-events: none;
 }
 
-.TPTPTPTP .group {
-  width: 5359px;
-  height: 2306px;
-  display: flex;
+/* Gradasi Vertikal (Bawah) */
+.hero-gradient-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px; /* Tinggi zona gradasi */
+    z-index: 5; /* Pastikan di atas gambar latar belakang */
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 0.3) 50%,
+        rgba(0, 0, 0, 0) 100%
+    );
+    pointer-events: none;
+}
+/* --- Akhir Gradasi Baru --- */
+
+
+/* === 4. LAPISAN LATAR HERO === */
+/* Ini adalah lapisan-lapisan gambar latar belakang untuk hero section.
+   - hero-bg-bottom: Lapisan paling bawah, dengan efek blur dan animasi bergerak.
+   - hero-bg-top: Lapisan di atasnya, gambar yang lebih jelas.
+*/
+.hero-bg-bottom{
+    z-index:0;
+    background-image: url('/img/BG.png');
+    opacity:0.95;
+    mix-blend-mode: normal;
+    -webkit-filter: blur(50px);
+    filter: blur(50px);
+    position:absolute;
+    inset:0;
+    background-size: 200% auto;
+    background-position: 0% center;
+    background-repeat: repeat-x;
+    animation: pan 6s linear infinite;
+}
+.hero-bg-top{
+    z-index:1;
+    background-image: url('/img/BG2.png');
+    opacity:0.35;
+    mix-blend-mode: normal;
+    position:absolute;
+    inset:0;
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
 }
 
-.TPTPTPTP .div {
-  width: 5359.12px;
-  height: 2306.3px;
-  margin-left: 0;
-  display: flex;
-  gap: 3010.6px;
+/* === 5. KONTAINER UTAMA === */
+/* Kontainer ini membungkus konten agar tidak terlalu lebar di layar besar. */
+.hero > .container{ position:relative; z-index:2; }
+.container{ max-width:1100px;margin:0 auto }
+
+/* === 6. LOGO & KONTROL ATAS === */
+/* Mengatur posisi logo di kiri atas dan tombol-tombol di kanan atas. */
+.logo-top-left{
+    position:fixed;top:29px;left:26px;right:auto;
+    z-index:60;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding-right:6px
+}
+.logo-img{
+    width:190px;
+    height:48px;
 }
 
-.TPTPTPTP .pexels-mahdibafande {
-  margin-top: -1245px;
-  width: 2306.3px;
-  height: 2679.68px;
-  margin-left: -5024.9px;
-  aspect-ratio: 0.86;
+.controls-top-right{
+    position:fixed;top:29px;right:26px;
+    z-index:70;
+    display:flex;
+    align-items:center;
+    gap:12px
 }
 
-.TPTPTPTP .img {
-  margin-top: 415px;
-  width: 1920px;
-  height: 1891.3px;
-  aspect-ratio: 0.86;
+/* === 7. TOMBOL & NAVIGASI === */
+/* Gaya untuk semua tombol, termasuk tombol hamburger dan menu navigasi. */
+.btn{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.08);
+    padding:15px 17px;
+    border-radius:10px;color:var(--text);
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    text-decoration:none;
+    font-size:14px
 }
 
-.TPTPTPTP .overlap-group {
-  position: absolute;
-  height: 1080px;
-  top: 0;
-  left: 0;
-  display: flex;
-  padding: 111.3px 60px;
-  align-items: flex-start;
-  min-width: 1920px;
-  background-image: url(./img/glass-mirror.png);
-  background-size: 100% 100%;
+/* Tombol Hamburger */
+.btn--icon{
+    padding:10px;
+    width:48px;
+    height:48px;
+    cursor:pointer;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: transparent;
+    border-radius:10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.btn--icon .bar{ display:block; width:20px; height:2px; background:var(--text); margin:3px 0; transition: none }
+
+/* Kontainer Menu Navigasi (yang bisa muncul/hilang) */
+.nav-menu-container{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction: row;
+    width:0;
+    height:48px;
+    box-sizing:border-box;
+    opacity:0;
+    pointer-events:none;
+    overflow:hidden;
+    transition: width 0.3s ease-out, opacity 0.3s ease-out, height 0.12s ease;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius:10px;
+    backdrop-filter: blur(6px);
 }
 
-.TPTPTPTP .LOGO {
-  width: 240px;
-  height: 78px;
+.nav-menu-container.active {
+    width: 250px;
+    height:48px;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 0 10px;
 }
 
-.TPTPTPTP .a-creative {
-  position: absolute;
-  top: 387px;
-  left: calc(50.00% - 894px);
-  font-family: "Montserrat-Bold", Helvetica;
-  font-weight: 700;
-  color: #ffffff;
-  font-size: 83.6px;
-  letter-spacing: 0;
-  line-height: normal;
+.nav-menu-container a{
+    white-space:nowrap;
+    font-size:18px;
+    text-decoration:none;
+    color:var(--primary);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:48px;
+    padding:0 12px;
+    border-radius:8px;
+    transition: background-color 0.1s ease;
 }
 
-.TPTPTPTP .rectangle {
-  position: absolute;
-  top: 822px;
-  left: calc(50.00% - 960px);
-  width: 1920px;
-  height: 1196px;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 1) 100%
-  );
+.nav-menu-container a:hover { transform: scale(1.06); }
+
+/* Menyembunyikan navigasi lama */
+.nav-pill{ display:none!important; }
+
+/* === 8. TIPOGRAFI === */
+/* Gaya untuk teks, seperti judul utama (h1) dan teks pengantar (lead). */
+.hero h1{font-size:64px;line-height:0.95;margin:0 0 36px;font-weight:800;letter-spacing:-1px}
+.lead{max-width:900px;color:var(--muted);font-size:15px}
+
+/* === 9. ANIMASI === */
+/* Animasi 'pan' untuk menggerakkan gambar latar secara horizontal. */
+@keyframes pan {
+    from { background-position: 0% 50%; }
+    to   { background-position: 100% 50%; }
 }
 
-.TPTPTPTP .group-2 {
-  position: absolute;
-  top: 1109px;
-  left: calc(50.00% - 894px);
-  width: 1766px;
-  height: 564px;
-  display: flex;
-  flex-direction: column;
+/* === 10. SECTION WORKS / SERVICES === */
+/* Gaya untuk bagian "Works" atau layanan. */
+.section-works{
+    position:relative;
+    /* Turunkan padding-bottom untuk mengurangi jarak ke section di bawahnya */
+    padding:56px 48px 56px; 
+    box-sizing:border-box;
+    overflow:hidden;
+    color:var(--text);
+}
+/* ... background, overlay, inner tidak berubah ... */
+.section-works .works-inner{ 
+    position:relative; 
+    z-index:3; 
+    max-width:1100px;
+    margin:0 auto;
+}
+.section-works .intro{ 
+    color: rgba(255, 255, 255, 0.6); 
+    font-size:15px; 
+    /* Hapus margin-bottom di sini karena akan diganti dengan margin di bawah garis */
 }
 
-.TPTPTPTP .studio-tigapagi-is-a {
-  margin-left: -4px;
-  height: 123px;
-  width: 1762px;
-  align-self: center;
-  font-family: "Montserrat-Bold", Helvetica;
-  font-weight: 400;
-  color: #ffffff;
-  font-size: 28px;
-  text-align: justify;
-  letter-spacing: 0;
-  line-height: 41px;
+/* Garis pemisah horizontal yang membagi intro dan judul */
+.section-works .hr-line{ 
+    height:2px;
+    background:rgba(255,255,255,0.18); 
+    /* Tambahkan margin atas dan bawah untuk memisahkan teks */
+    margin:16px 0 20px 0; 
+}
+.section-works h2{ 
+    font-size:72px; 
+    /* Hapus margin-top, pertahankan margin-bottom */
+    margin:0 0 40px; 
+    font-weight:600; 
+    line-height:1; 
+    letter-spacing:-1px 
+}
+.section-works h2 em{ font-style:normal; font-weight:800 }
+
+/* Works Cards (Pill Layout) */
+.section-works .works-cards{ 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 90px; 
+    /* PENTING: Tambahkan margin-bottom yang besar untuk memberi jarak ke Running Animation Section */
+    margin-top: 0; 
+    margin-bottom: 8px; 
+}
+.section-works .card{ 
+    background: transparent; 
+    border: 1px solid rgba(255,255,255,0.3); 
+    padding: 14px 24px; 
+    border-radius: 9px; 
+    box-shadow: none; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    box-sizing:border-box; 
+    font-size:14px; 
+    font-weight:500; 
+    text-align:center; 
+    color:var(--text); 
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
-/* ... file continues (truncated here for brevity) ... */
+
+/* === 11. MEDIA QUERIES (RESPONSIVE) === */
+/* Penyesuaian gaya untuk layar yang lebih kecil (tablet dan mobile). */
+@media(max-width:1000px){ .section-works h2{ font-size:44px } }
+@media(max-width:900px){.hero{padding:40px 20px}.hero h1{font-size:36px}}
+@media(max-width:700px){ .controls-top-right{gap:8px} }
+@media(max-width:600px){ 
+    .section-works{ padding:36px 20px 64px } 
+    .section-works h2{ font-size:28px } 
+}
+
+
+/* === RUNNING ANIMATION SECTION === */
+.section-running {
+    position: relative;
+    /* Hapus padding atas/bawah. Animasi akan mengisi ruangnya sendiri */
+    padding: 0; 
+    background: var(--bg);
+    overflow: hidden; 
+    white-space: nowrap; 
+}
+
+.running-container {
+    display: flex; 
+    width: fit-content; 
+    animation: runRightToLeft 25s linear infinite; 
+    gap: 0;
+}
+
+.running-animation {
+    display: inline-block;
+    /* PENTING: Atur ulang ke 550px untuk desktop */
+    height: 550px; 
+    width: auto;
+    max-width: none;
+    object-fit: cover; 
+    flex-shrink: 0;
+    min-width: 100vw;
+}
+
+/* Keyframes animasi tidak berubah */
+@keyframes runRightToLeft {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100vw); 
+    }
+}
+
+/* Media Queries untuk animasi (sesuaikan tinggi di sini) */
+@media(max-width:1200px) {
+    .running-container {
+        animation-duration: 22s;
+    }
+    .running-animation {
+        height: 450px; /* Tinggi lebih kecil untuk layar menengah */
+    }
+}
+
+@media(max-width:900px) {
+    .section-running {
+        padding: 0;
+    }
+    .running-container {
+        animation-duration: 20s;
+    }
+    .running-animation {
+        height: 350px; /* Tinggi lebih kecil untuk tablet */
+    }
+}
+
+@media(max-width:600px) {
+    .section-running {
+        padding: 0;
+    }
+    .running-container {
+        animation-duration: 15s;
+    }
+    .running-animation {
+        height: 250px; /* Tinggi lebih kecil untuk mobile */
+    }
+}

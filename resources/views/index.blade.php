@@ -4,175 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tigapagi</title>
-<style>
-:root{ --bg:#000; --text:#fff; --muted:#bdbdbd; --primary:#fff; }
-html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial, sans-serif;background:var(--bg);color:var(--text)}
-
-/* ... (Kode CSS HERO, Backgrounds, Logo, Controls-Top-Right sama) ... */
-
-/* HERO section styling remains the same */
-.hero{
-    position:relative;
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    text-align: center;
-    padding:72px 48px;
-    box-sizing:border-box;
-    overflow:hidden;
-}
-
-/* Backgrounds remain the same */
-.hero-bg-bottom{
-    z-index:0;
-    background-image: url('{{ asset("img/BG.png") }}');
-    opacity:0.95;
-    mix-blend-mode: normal;
-    -webkit-filter: blur(50px);
-    filter: blur(50px);
-    position:absolute;
-    inset:0;
-    background-size: 200% auto;
-    background-position: 0% center;
-    background-repeat: repeat-x;
-    animation: pan 6s linear infinite;
-}
-.hero-bg-top{
-    z-index:1;
-    background-image: url('{{ asset("img/BG2.png") }}');
-    opacity:35%;
-    mix-blend-mode: normal;
-    position:absolute;
-    inset:0;
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
-}
-.hero > .container{ position:relative; z-index:2; }
-.container{ max-width:1100px;margin:0 auto }
-
-/* Logo top-left remains the same */
-.logo-top-left{
-    position:fixed;top:29px;left:26px;right:auto;
-    z-index:60;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding-right:6px
-}
-.logo-img{
-    width:190px;
-    height:48px;
-}
-
-/* controls on top-right (Container Utama) */
-.controls-top-right{
-    position:fixed;top:29px;right:26px;
-    z-index:70;
-    display:flex;
-    align-items:center;
-    gap:12px
-}
-
-/* Button Styling (Contact Button) */
-.btn{
-    background:transparent;
-    border:1px solid rgba(255,255,255,0.08);
-    padding:15px 17px;
-    border-radius:10px;color:var(--text);
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    text-decoration:none;
-    font-size:14px
-}
-
-/* --- PERBAIKAN 1: Tombol Hamburger Tanpa Border --- */
-.btn--icon{
-    padding:10px;
-    width:48px;
-    height:48px;
-    cursor:pointer;
-    border: 1px solid rgba(255,255,255,0.08); /* Tambahkan border yang sama dengan Contact */
-    background: transparent;
-    border-radius:10px; /* Tambahkan radius agar seperti Contact */
-    display: flex; /* Tambahkan flex untuk align tengah isian bar */
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-.btn--icon .bar{ display:block; width:20px; height:2px; background:var(--text); margin:3px 0; transition: none }
-
-
-/* --- NAVIGATION MENU CONTAINER (YANG MEMANJANG) --- */
-.nav-menu-container{
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction: row;
-    width:0;
-    height:48px; /* match hamburger button height */
-    box-sizing:border-box;
-    opacity:0;
-    pointer-events:none;
-    overflow:hidden;
-    transition: width 0.3s ease-out, opacity 0.3s ease-out, height 0.12s ease;
-
-    /* Styling Pill Navigasi (kotak berisi Home, Work, Team) */
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius:10px;
-    backdrop-filter: blur(6px);
-}
-
-.nav-menu-container.active {
-    width: 250px;
-    height:48px; /* keep same height when expanded */
-    opacity: 1;
-    pointer-events: auto;
-    padding: 0 10px; 
-}
-
-/* --- PERBAIKAN 2: Aligment Tautan Menu Rata Tengah Vertikal --- */
-/* Styling Tautan di dalamnya (Home, Work, Team) */
-.nav-menu-container a{
-    white-space:nowrap;
-    font-size:18px;
-    text-decoration:none;
-    color:var(--primary);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    height:48px;
-    padding:0 12px;
-    border-radius:8px;
-    transition: background-color 0.1s ease;
-}
-
-.nav-menu-container a:hover {
-    transform: scale(1.06);
-}
-
-
-/* ... (Kode CSS lainnya sama) ... */
-.nav-pill{ display:none!important; }
-
-@media(max-width:700px){ .controls-top-right{gap:8px} }
-
-.hero h1{font-size:64px;line-height:0.95;margin:0 0 36px;font-weight:800;letter-spacing:-1px}
-.lead{max-width:900px;color:var(--muted);font-size:15px}
-@media(max-width:900px){.hero{padding:40px 20px}.hero h1{font-size:36px}}
-
-@keyframes pan {
-    from { background-position: 0% 50%; }
-    to   { background-position: 100% 50%; }
-}
-</style>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
 
-<div class="logo-top-left" title="Ganti dengan foto/logo kamu nanti">
+<div class="logo-top-left" >
     <img class="logo-img" src="{{ asset('img/tb.png') }}">
 </div>
 
@@ -197,11 +33,40 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe U
 </div>
 
 <section class="hero" role="banner">
+    <div class="hero-gradient-bottom" aria-hidden="true"></div>
     <div class="hero-bg hero-bg-bottom" aria-hidden="true"></div>
+    <div class="hero-gradient-top" aria-hidden="true"></div>
     <div class="hero-bg hero-bg-top" aria-hidden="true"></div>
     <div class="container">
         <h1>A creative makerspace that consist of passionate nocturnal folks</h1>
     </div>
+</section>
+
+<!-- Works / Services section (background image provided by you) -->
+<section class="section-works" aria-labelledby="worksTitle">
+    <div class="section-bg-bottom" aria-hidden="true"></div>
+    <div class="section-bg-top" aria-hidden="true"></div>
+    <div class="section-overlay" aria-hidden="true"></div>
+    <div class="works-inner">
+        <p class="intro"><strong>Studio Tigapagi</strong> is a leading digital creative agency and dedicated creative makerspace located in Sanur, Denpasar, Bali. Known for its high-commitment culture, the agency describes its team as "passionate nocturnal folks" who specialize in delivering high-impact branding.</p>
+        <div class="hr-line"></div>
+        <h2 id="worksTitle">Unlock Your Brand's <em>Potential</em><br>with our Strategy</h2>
+        <div class="works-cards" role="list">
+            <div class="card" role="listitem" aria-label="Branding">Branding</div>
+            <div class="card" role="listitem" aria-label="Social Media Management">Social Media Management</div>
+            <div class="card" role="listitem" aria-label="Photo Production">Photo Production</div>
+            <div class="card" role="listitem" aria-label="UGC Video">UGC Video</div>
+            <div class="card" role="listitem" aria-label="Campaign">Campaign</div>
+        </div>
+    </div>
+</section>
+
+<!-- Running animation section -->
+<section class="section-running" aria-label="Running animation">
+    <div class="running-container">
+        <img src="{{ asset('img/run.png') }}" alt="Running" class="running-animation">
+        <img src="{{ asset('img/run.png') }}" alt="Running" class="running-animation">
+        <img src="{{ asset('img/run.png') }}" alt="Running" class="running-animation"> </div>
 </section>
 
 <script>
