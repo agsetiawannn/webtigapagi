@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tigapagi</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <!-- Security: Content Security Policy -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -47,7 +46,6 @@
     </div>
 </section>
 
-<!-- Works / Services section (background image provided by you) -->
 <section class="section-works" aria-labelledby="worksTitle">
     <div class="section-bg-bottom" aria-hidden="true"></div>
     <div class="section-bg-top" aria-hidden="true"></div>
@@ -66,7 +64,6 @@
     </div>
 </section>
 
-<!-- Running animation section -->
 <section class="section-running" aria-label="Running animation">
     <div class="running-container">
         <img src="{{ asset('img/run.png') }}" alt="Running" class="running-animation">
@@ -75,7 +72,6 @@
     </div>
 </section>
 
-<!-- Our Clients section -->
 <section class="section-clients" aria-labelledby="clientsTitle">
     <div class="clients-inner">
         <h2 id="clientsTitle">Our <strong>clients</strong></h2>
@@ -88,7 +84,6 @@
     </div>
 </section>
 
-<!-- Contact section -->
 <section class="section-contact" aria-labelledby="contactTitle">
     <div class="contact-inner">
         <div class="contact-form-wrapper">
@@ -105,6 +100,52 @@
         </div>
     </div>
 </section>
+
+<footer class="section-footer" aria-labelledby="footerTitle">
+    <div class="footer-bg-bottom" aria-hidden="true"></div>
+    <div class="footer-bg-top" aria-hidden="true"></div>
+    <div class="footer-gradient-top" aria-hidden="true"></div>
+    <div class="footer-content">
+        <!-- Left Side: Social Media & Location -->
+        <div class="footer-left">
+            <div class="footer-socials">
+                <div class="social-item">
+                    <img src="{{ asset('img/IG.png') }}" alt="Instagram">
+                    <span>@studio.tigapagi</span>
+                </div>
+                <div class="social-item">
+                    <img src="{{ asset('img/T.png') }}" alt="TikTok">
+                    <span>@studio.tigapagi</span>
+                </div>
+                <div class="social-item">
+                    <img src="{{ asset('img/TT.png') }}" alt="Twitter">
+                    <span>@studio.tigapagi</span>
+                </div>
+            </div>
+
+            <div class="footer-left-bottom">
+                <div class="footer-location-bottom">
+                    <h3>Bali</h3>
+                    <p>Jl. Danau Tamblingan No.226, Sanur, Denpasar Selatan,<br>Kota Denpasar, Bali</p>
+                </div>
+                <div class="footer-copyright">
+                    <span class="copyright">©STUDIO TIGAPAGI 2026</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Logo & Credits -->
+        <div class="footer-right">
+            <div class="footer-logo">
+                <img src="{{ asset('img/TP.png') }}" alt="Studio Tigapagi Logo">
+            </div>
+
+            <div class="footer-credit-text">
+                <span class="credit">DAZEE X SETYAWAN</span>
+            </div>
+        </div>
+    </div>
+</footer>
 
 <script>
 // Disable right-click context menu
@@ -126,7 +167,7 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Detect Developer Tools
+// Detect Developer Tools (Simplistic check)
 let devtools = { open: false };
 const threshold = 160;
 
@@ -142,7 +183,7 @@ setInterval(function() {
     }
 }, 500);
 
-// Hide console
+// Suppress console messages
 console.log = function() {};
 console.warn = function() {};
 console.error = function() {};
