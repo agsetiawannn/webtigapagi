@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tigapagi</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <!-- Security: Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
 </head>
 <body>
 
@@ -26,7 +31,7 @@
         <span class="bar"></span>
     </button>
 
-    <a href="#" class="btn" title="Contact">
+    <a href="https://wa.me/089638893601" class="btn" title="Contact" target="_blank" rel="noopener noreferrer">
         <img src="{{ asset('img/wa.png') }}" alt="WhatsApp" style="width:18px;height:18px;border-radius:50%;display:inline-block;object-fit:cover;" />
         Contact
     </a>
@@ -66,8 +71,82 @@
     <div class="running-container">
         <img src="{{ asset('img/run.png') }}" alt="Running" class="running-animation">
         <img src="{{ asset('img/run.png') }}" alt="Running" class="running-animation">
-        <img src="{{ asset('img/run.png') }}" alt="Running" class="running-animation"> </div>
+        <img src="{{ asset('img/run.png') }}" alt="Running" class="running-animation"> 
+    </div>
 </section>
+
+<!-- Our Clients section -->
+<section class="section-clients" aria-labelledby="clientsTitle">
+    <div class="clients-inner">
+        <h2 id="clientsTitle">Our <strong>clients</strong></h2>
+        <div class="clients-content">
+            <img src="{{ asset('img/client.png') }}" alt="Our Clients" class="clients-image">
+        </div>
+        <div class="clients-footer">
+            <a href="{{ route('client') }}" class="btn-view-all">View All Clients</a>
+        </div>
+    </div>
+</section>
+
+<!-- Contact section -->
+<section class="section-contact" aria-labelledby="contactTitle">
+    <div class="contact-inner">
+        <div class="contact-form-wrapper">
+            <form class="contact-form" id="contactForm" method="POST" action="{{ route('contact.store') }}">
+                @csrf
+                <input type="text" class="form-input" placeholder="Name" name="name" required>
+                <input type="email" class="form-input" placeholder="Email" name="email" required>
+                <input type="tel" class="form-input" placeholder="Phone number" name="phone" required>
+                <button type="submit" class="btn-submit">Submit</button>
+            </form>
+        </div>
+        <div class="contact-text-wrapper">
+            <p><strong>Studio Tigapagi</strong> is a leading digital creative agency and dedicated creative makerspace located in Sanur, Denpasar, Bali. Known for its high-commitment culture, the agency describes its team as "passionate nocturnal folks" who specialize in delivering high-impact branding, sophisticated digital content strategy, and exceptional visual production.</p>
+        </div>
+    </div>
+</section>
+
+<script>
+// Disable right-click context menu
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    return false;
+});
+
+// Disable F12, Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+Shift+J
+document.addEventListener('keydown', function(e) {
+    if (
+        e.key === 'F12' || 
+        (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+        (e.ctrlKey && e.shiftKey && e.key === 'C') || 
+        (e.ctrlKey && e.shiftKey && e.key === 'J')
+    ) {
+        e.preventDefault();
+        return false;
+    }
+});
+
+// Detect Developer Tools
+let devtools = { open: false };
+const threshold = 160;
+
+setInterval(function() {
+    if (window.outerHeight - window.innerHeight > threshold || window.outerWidth - window.innerWidth > threshold) {
+        if (!devtools.open) {
+            devtools.open = true;
+            console.clear();
+            console.log('%cSTOP!', 'font-size: 50px; color: red; font-weight: bold;');
+        }
+    } else {
+        devtools.open = false;
+    }
+}, 500);
+
+// Hide console
+console.log = function() {};
+console.warn = function() {};
+console.error = function() {};
+</script>
 
 <script>
 function toggleMenu(){
