@@ -1,0 +1,121 @@
+/* === LOGO & KONTROL ATAS === */
+.logo-top-left {
+    position: fixed;
+    top: 29px;
+    left: 26px;
+    right: auto;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-right: 6px;
+}
+
+.logo-img {
+    width: 190px;
+    height: 48px;
+}
+
+.controls-top-right {
+    position: fixed;
+    top: 29px;
+    right: 26px;
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* === TOMBOL & NAVIGASI === */
+.btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 15px 17px;
+    border-radius: 10px;
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn--icon {
+    padding: 10px;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: transparent;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn--icon .bar {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--text);
+    margin: 3px 0;
+    transition: none;
+}
+
+/* === MENU NAVIGASI === */
+.nav-menu-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 0;
+    height: 48px;
+    box-sizing: border-box;
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
+    transition: width 0.3s ease-out, opacity 0.3s ease-out, height 0.12s ease;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    backdrop-filter: blur(6px);
+}
+
+.nav-menu-container.active {
+    width: 330px;
+    height: 48px;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 0 10px;
+}
+
+.nav-menu-container a {
+    white-space: nowrap;
+    font-size: 18px;
+    text-decoration: none;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    padding: 0 12px;
+    border-radius: 8px;
+    transition: background-color 0.1s ease;
+}
+
+.nav-menu-container a:hover {
+    transform: scale(1.06);
+}
+
+.nav-pill {
+    display: none !important;
+}
+
+/* === RESPONSIVE HEADER === */
+@media(max-width: 768px) {
+    .controls-top-right {
+        gap: 8px;
+    }
+}

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tigapagi</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -22,6 +22,7 @@
         <a href="#">Team</a>
         <a href="#">Work</a>
         <a href="#">Home</a>
+        <a href="{{ asset('login.php') }}">Tracking</a>
     </div>
 
     <button aria-label="Menu" onclick="toggleMenu()" class="btn--icon" id="menuBtn">
@@ -105,43 +106,69 @@
     <div class="footer-bg-bottom" aria-hidden="true"></div>
     <div class="footer-bg-top" aria-hidden="true"></div>
     <div class="footer-gradient-top" aria-hidden="true"></div>
-    <div class="footer-content">
-        <!-- Left Side: Social Media & Location -->
-        <div class="footer-left">
-            <div class="footer-socials">
-                <div class="social-item">
-                    <img src="{{ asset('img/IG.png') }}" alt="Instagram">
-                    <span>@studio.tigapagi</span>
+    
+    <div class="footer-wrapper">
+        <div class="footer-content">
+            <!-- Left Side -->
+            <div class="footer-left">
+                <div class="footer-section">
+                    <h4 class="footer-section-title">Our Social Media</h4>
+                    <div class="footer-socials">
+                        <div class="social-item">
+                            <img src="{{ asset('img/IG.png') }}" alt="Instagram">
+                            <span>@studio.tigapagi</span>
+                        </div>
+                        <div class="social-item">
+                            <img src="{{ asset('img/T.png') }}" alt="TikTok">
+                            <span>@studio.tigapagi</span>
+                        </div>
+                        <div class="social-item">
+                            <img src="{{ asset('img/TT.png') }}" alt="Twitter">
+                            <span>@studio.tigapagi</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="social-item">
-                    <img src="{{ asset('img/T.png') }}" alt="TikTok">
-                    <span>@studio.tigapagi</span>
-                </div>
-                <div class="social-item">
-                    <img src="{{ asset('img/TT.png') }}" alt="Twitter">
-                    <span>@studio.tigapagi</span>
+
+                <!-- Contact Info Row Below Social Media -->
+                <div class="footer-contact-row">
+                    <div class="footer-contact-left">
+                        <div class="contact-item">
+                            <h4>Email</h4>
+                            <p>produksitigapagi@gmail.com</p>
+                        </div>
+                        <div class="contact-item">
+                            <h4>Contact</h4>
+                            <p>0896-3889-3601 - Felix</p>
+                        </div>
+                    </div>
+                    <div class="footer-contact-right">
+                        <h4 class="footer-section-title">Bali</h4>
+                        <p class="footer-location-text">Jl. Danau Tamblingan No.226, Sanur, Denpasar Selatan, Kota Denpasar, Bali</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="footer-left-bottom">
-                <div class="footer-location-bottom">
-                    <h3>Bali</h3>
-                    <p>Jl. Danau Tamblingan No.226, Sanur, Denpasar Selatan,<br>Kota Denpasar, Bali</p>
-                </div>
-                <div class="footer-copyright">
-                    <span class="copyright">©STUDIO TIGAPAGI 2026</span>
+            <!-- Middle: Empty for spacing -->
+            <div class="footer-middle">
+            </div>
+
+            <!-- Right Side: Logo -->
+            <div class="footer-right">
+                <div class="footer-logo">
+                    <img src="{{ asset('img/TP.png') }}" alt="Studio Tigapagi Logo">
                 </div>
             </div>
         </div>
 
-        <!-- Right Side: Logo & Credits -->
-        <div class="footer-right">
-            <div class="footer-logo">
-                <img src="{{ asset('img/TP.png') }}" alt="Studio Tigapagi Logo">
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="footer-bottom-left">
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <span class="footer-link-text">Daze</span>
+                <span class="footer-link-text">Setiawan</span>
             </div>
-
-            <div class="footer-credit-text">
-                <span class="credit">DAZEE X SETYAWAN</span>
+            <div class="footer-bottom-right">
+                <span class="footer-copyright">©Studio Tigapagi 2025</span>
             </div>
         </div>
     </div>

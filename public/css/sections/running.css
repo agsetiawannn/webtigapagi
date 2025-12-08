@@ -1,0 +1,59 @@
+/* === RUNNING ANIMATION SECTION === */
+.section-running {
+    position: relative;
+    padding: 0;
+    background: var(--bg);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.running-container {
+    display: flex;
+    width: fit-content;
+    animation: runRightToLeft 25s linear infinite;
+    gap: 0;
+}
+
+.running-animation {
+    display: inline-block;
+    height: 550px;
+    width: auto;
+    max-width: none;
+    object-fit: cover;
+    flex-shrink: 0;
+    min-width: 100vw;
+}
+
+/* === RESPONSIVE RUNNING === */
+@media(max-width: 1200px) {
+    .running-container {
+        animation-duration: 22s;
+    }
+    .running-animation {
+        height: 450px;
+    }
+}
+
+@media(max-width: 900px) {
+    .section-running {
+        padding: 0;
+    }
+    .running-container {
+        animation-duration: 20s;
+    }
+    .running-animation {
+        height: 350px;
+    }
+}
+
+@media(max-width: 600px) {
+    .section-running {
+        padding: 0;
+    }
+    .running-container {
+        animation-duration: 15s;
+    }
+    .running-animation {
+        height: 250px;
+    }
+}

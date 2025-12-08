@@ -1,0 +1,23 @@
+/*
+====================================
+STYLESHEET UTAMA - TIGAPAGI WEB
+====================================
+
+Modular CSS Structure - Main Import File
+*/
+
+/* === VARIABEL & BASE === */
+@import url('variables.css');
+@import url('base.css');
+@import url('animations.css');
+
+/* === LAYOUT & COMPONENTS === */
+@import url('header.css');
+@import url('hero.css');
+
+/* === SECTIONS === */
+@import url('sections/works.css');
+@import url('sections/running.css');
+@import url('sections/clients.css');
+@import url('sections/contact.css');
+@import url('sections/footer.css');
