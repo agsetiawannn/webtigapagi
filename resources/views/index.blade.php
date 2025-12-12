@@ -5,12 +5,67 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tigapagi</title>
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self';">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
+    <style>
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+            overflow: hidden;
+        }
+        #loading-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #loading-video {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        /* Desktop (Landscape) - Show horizontal video */
+        @media (orientation: landscape) {
+            #loading-video-vertical {
+                display: none;
+            }
+            #loading-video-horizontal {
+                display: block;
+            }
+        }
+        
+        /* Mobile (Portrait) - Show vertical video */
+        @media (orientation: portrait) {
+            #loading-video-horizontal {
+                display: none;
+            }
+            #loading-video-vertical {
+                display: block;
+            }
+        }
+    </style>
 </head>
 <body>
+
+<!-- Loading Screen -->
+<div id="loading-screen">
+    <video id="loading-video-horizontal" class="loading-video" autoplay muted playsinline>
+        <source src="{{ asset('img/load.mp4') }}" type="video/mp4">
+    </video>
+    <video id="loading-video-vertical" class="loading-video" autoplay muted playsinline>
+        <source src="{{ asset('img/load2.mp4') }}" type="video/mp4">
+    </video>
+</div>
 
 <div class="logo-top-left" >
     <img class="logo-img" src="{{ asset('img/tb.png') }}">
@@ -22,7 +77,7 @@
         <a href="#">Team</a>
         <a href="#">Work</a>
         <a href="#">Home</a>
-        <a href="{{ asset('login.php') }}">Tracking</a>
+        <a href="/login.php">Tracking</a>
     </div>
 
     <button aria-label="Menu" onclick="toggleMenu()" class="btn--icon" id="menuBtn">
@@ -227,6 +282,31 @@ function toggleMenu(){
     const expanded = navMenu.classList.contains('active');
     menuBtn.setAttribute('aria-expanded', expanded);
 }
+
+// Loading Screen Handler
+window.addEventListener('load', function() {
+    const loadingScreen = document.getElementById('loading-screen');
+    const videoHorizontal = document.getElementById('loading-video-horizontal');
+    const videoVertical = document.getElementById('loading-video-vertical');
+    
+    function hideLoadingScreen() {
+        loadingScreen.classList.add('fade-out');
+        setTimeout(function() {
+            loadingScreen.style.display = 'none';
+        }, 500);
+    }
+    
+    // Hide loading screen when active video ends
+    videoHorizontal.addEventListener('ended', hideLoadingScreen);
+    videoVertical.addEventListener('ended', hideLoadingScreen);
+    
+    // Fallback: hide after 5 seconds if video doesn't end
+    setTimeout(function() {
+        if (loadingScreen.style.display !== 'none') {
+            hideLoadingScreen();
+        }
+    }, 5000);
+});
 </script>
 
 </body>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php'; // Mengasumsikan $conn sudah terkoneksi dengan benar
+include __DIR__ . '/db.php'; // Mengasumsikan $conn sudah terkoneksi dengan benar
 
 // Validasi admin login
 if (!isset($_SESSION['admin'])) {
@@ -51,11 +51,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
     $delete_id = intval($_GET['id']);
     
     if ($delete_id > 0) {
-        // 🔥 Perbaikan Keamanan: Gunakan Prepared Statement untuk menghapus data
-        
-        // Hapus data terkait di tabel lain (progress & client_progress)
-        $conn->prepare("DELETE FROM progress WHERE client_id = ?")->execute([$delete_id]);
+        // Hapus data terkait di client_progress
         $conn->prepare("DELETE FROM client_progress WHERE client_id = ?")->execute([$delete_id]);
+        
+        // Hapus client notes
+        $conn->prepare("DELETE FROM client_notes WHERE client_id = ?")->execute([$delete_id]);
         
         // Hapus klien utama
         $stmt_delete = $conn->prepare("DELETE FROM clients WHERE id = ?");
@@ -74,19 +74,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
 }
 
 
-// === Ambil Data (Koreksi Syntax SQL) ===
+// === Ambil Data ===
 $clients = $conn->query("SELECT id, name, email, status FROM clients ORDER BY name ASC");
 
-// KOREKSI SINTAKS SQL: Menghapus koma setelah 'name'
 $active_clients = $conn->query("SELECT id, name FROM clients WHERE status='active' ORDER BY name ASC");
-
-// Query progress tidak memiliki masalah sintaks
-$progress = $conn->query("
-    SELECT p.id, c.name AS client_name, p.title, p.description, p.status
-    FROM progress p
-    JOIN clients c ON p.client_id = c.id
-    ORDER BY p.created_at DESC
-");
 ?>
 <!DOCTYPE html>
 <html lang="id">

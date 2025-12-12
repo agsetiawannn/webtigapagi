@@ -1,11 +1,6 @@
 <?php
 session_start();
-include 'db.php';
-
-// --- DEFINISI PATH AMAN UNTUK LOCALHOST ---
-// PATH PROYEK ANDA: /client-progress/
-$project_base_path = "/client-progress/"; 
-// ------------------------------------------
+include __DIR__ . '/db.php';
 
 // --- Cek Login Admin ---
 if (!isset($_SESSION['admin'])) {
@@ -28,7 +23,7 @@ $client = $res->fetch_assoc();
 if (!$client) die("Data klien tidak ditemukan.");
 
 // --- Ambil Progress Lama (Initial Load) ---
-$stmt2 = $conn->prepare("SELECT onboard, presprint, sprint, client_view FROM client_progress WHERE client_id = ?");
+$stmt2 = $conn->prepare("SELECT onboard, presprint, sprint, client_view, sprint_week_focus FROM client_progress WHERE client_id = ?");
 $stmt2->bind_param("i", $client_id);
 $stmt2->execute();
 $res2 = $stmt2->get_result();
@@ -36,106 +31,80 @@ $progress_data = $res2->fetch_assoc();
 
 // Dekode data untuk ditampilkan di form
 $db_client_view_saved = $progress_data['client_view'] ?? 'none'; 
+$sprint_week_focus = $progress_data['sprint_week_focus'] ?? 1; // Default Week 1
 $onboard_data   = $progress_data ? json_decode($progress_data['onboard'], true)   : [];
 $presprint_data = $progress_data ? json_decode($progress_data['presprint'], true) : [];
 $sprint_data    = $progress_data ? json_decode($progress_data['sprint'], true)    : [];
 
-
-// --- Handle Simpan dan Arsip ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    // ------------------------------------------
-    // A. LOGIKA PENGARSIPAN
-    // ------------------------------------------
-    if (isset($_POST['action']) && $_POST['action'] === 'archive') {
-        $phase = $_POST['phase_to_archive'];
-        $phase_key = strtolower($phase); 
-        
-        $json_to_archive = $progress_data[$phase_key]; 
-        
-        $current_date_formatted = date("d F Y");
-        $title_archive = "Arsip " . ucfirst($phase) . " (Selesai pada " . $current_date_formatted . ")";
-        
-        if ($json_to_archive && json_decode($json_to_archive) !== null && json_decode($json_to_archive, true) != []) {
-            
-            $stmt_archive = $conn->prepare("INSERT INTO project_history (client_id, title, phase, data_json) VALUES (?, ?, ?, ?)");
-            $stmt_archive->bind_param("isss", $client_id, $title_archive, $phase_key, $json_to_archive);
-            $stmt_archive->execute();
-            
-            $archive_id = $conn->insert_id; 
-
-            $empty_json = json_encode([]);
-            $stmt_clear = $conn->prepare("UPDATE client_progress SET $phase_key = ?, updated_at=NOW() WHERE client_id = ?");
-            $stmt_clear->bind_param("si", $empty_json, $client_id);
-            $stmt_clear->execute();
-
-            $redirect_view = $_GET['view'] ?? 'all'; 
-            header("Location: ".$_SERVER['PHP_SELF']."?client_id=".$client_id."&view=".$redirect_view."&archived=1&title=".urlencode($title_archive)."&archive_id=".$archive_id); 
-            exit();
-
-        } else {
-            $redirect_view = $_GET['view'] ?? 'all'; 
-            header("Location: ".$_SERVER['PHP_SELF']."?client_id=".$client_id."&view=".$redirect_view."&archive_error=".urlencode("Data ".ucfirst($phase)." kosong atau belum diisi."));
-            exit();
-        }
-    }
-    
-    // ------------------------------------------
-    // B. LOGIKA SIMPAN REGULER
-    // ------------------------------------------
-    else {
-        
-        // --- Preserve existing data for phases not present in the POST ---
-        // If the form does not submit a phase (because the UI only showed one view),
-        // we must not overwrite the stored JSON with an empty array. Merge behavior:
-        $existing_onboard   = $progress_data['onboard']   ?? json_encode([]);
-        $existing_presprint = $progress_data['presprint'] ?? json_encode([]);
-        $existing_sprint    = $progress_data['sprint']    ?? json_encode([]);
-
-        $onboard   = isset($_POST['onboard'])   ? json_encode($_POST['onboard'])   : $existing_onboard;
-        $presprint = isset($_POST['presprint']) ? json_encode($_POST['presprint']) : $existing_presprint;
-        $sprint    = isset($_POST['sprint'])    ? json_encode($_POST['sprint'])    : $existing_sprint;
-        $client_view = $_POST['client_view'] ?? $progress_data['client_view'] ?? 'none'; 
-        
-        $stmt3 = $conn->prepare("SELECT id FROM client_progress WHERE client_id = ?");
-        $stmt3->bind_param("i", $client_id);
-        $stmt3->execute();
-        $exists = $stmt3->get_result();
-
-        if ($exists->num_rows > 0) {
-            $stmt4 = $conn->prepare("UPDATE client_progress SET onboard=?, presprint=?, sprint=?, client_view=?, updated_at=NOW() WHERE client_id=?");
-            $stmt4->bind_param("ssssi", $onboard, $presprint, $sprint, $client_view, $client_id); 
-            $stmt4->execute();
-        } else {
-            $stmt5 = $conn->prepare("INSERT INTO client_progress (client_id, onboard, presprint, sprint, client_view) VALUES (?, ?, ?, ?, ?)");
-            $stmt5->bind_param("issss", $client_id, $onboard, $presprint, $sprint, $client_view);
-            $stmt5->execute();
-        }
-
-        // Muat ulang data
-        $stmt2->execute(); $res2 = $stmt2->get_result(); $progress_data = $res2->fetch_assoc();
-        $db_client_view_saved = $progress_data['client_view'] ?? 'none'; 
-        $onboard_data   = $progress_data ? json_decode($progress_data['onboard'], true)   : [];
-        $presprint_data = $progress_data ? json_decode($progress_data['presprint'], true) : [];
-        $sprint_data    = $progress_data ? json_decode($progress_data['sprint'], true)    : [];
-        
-        $display_success = '<div class="success">Progress berhasil disimpan.</div>';
+// --- Handle Note Submission ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_admin_note'])) {
+    $note_text = trim($_POST['admin_note_text'] ?? '');
+    if (!empty($note_text)) {
+        $stmt_note = $conn->prepare("INSERT INTO client_notes (client_id, note_text, created_by) VALUES (?, ?, 'admin')");
+        $stmt_note->bind_param("is", $client_id, $note_text);
+        $stmt_note->execute();
+        header("Location: " . $_SERVER['PHP_SELF'] . "?client_id=" . $client_id . "&view=" . ($_GET['view'] ?? 'onboard'));
+        exit();
     }
 }
 
-// Menampilkan pesan sukses / error dari URL (GET)
-$view = $_GET['view'] ?? 'onboard'; // 🔥 Default ke 'onboard'
-$display_success = '';
+// --- Load Notes ---
+$stmt_notes = $conn->prepare("SELECT note_text, created_by, created_at FROM client_notes WHERE client_id = ? ORDER BY created_at DESC");
+$stmt_notes->bind_param("i", $client_id);
+$stmt_notes->execute();
+$notes_result = $stmt_notes->get_result();
+$admin_notes = [];
+while ($row = $notes_result->fetch_assoc()) {
+    $admin_notes[] = $row;
+}
 
-if (isset($_GET['archived']) && isset($_GET['title'])) {
-    $title = htmlspecialchars(urldecode($_GET['title']));
-    // Link Lihat Arsip Klien Dihapus per permintaan Anda
-    $display_success = '<div class="success">Berhasil diarsipkan! Data fase aktif telah direset. Arsip: <b>' . $title . '</b></div>'; 
+
+// --- Handle Simpan Progress ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['save_admin_note'])) {
     
-} elseif (isset($_GET['archive_error'])) {
-    $error = htmlspecialchars(urldecode($_GET['archive_error']));
-    $display_success = '<div class="error">Gagal Arsip: ' . $error . '</div>';
-} 
+    // --- Preserve existing data for phases not present in the POST ---
+    // If the form does not submit a phase (because the UI only showed one view),
+    // we must not overwrite the stored JSON with an empty array. Merge behavior:
+    $existing_onboard   = $progress_data['onboard']   ?? json_encode([]);
+    $existing_presprint = $progress_data['presprint'] ?? json_encode([]);
+    $existing_sprint    = $progress_data['sprint']    ?? json_encode([]);
+
+    $onboard   = isset($_POST['onboard'])   ? json_encode($_POST['onboard'])   : $existing_onboard;
+    $presprint = isset($_POST['presprint']) ? json_encode($_POST['presprint']) : $existing_presprint;
+    $sprint    = isset($_POST['sprint'])    ? json_encode($_POST['sprint'])    : $existing_sprint;
+    $client_view = $_POST['client_view'] ?? $progress_data['client_view'] ?? 'none'; 
+    $sprint_week_focus = intval($_POST['sprint_week_focus'] ?? $progress_data['sprint_week_focus'] ?? 1); 
+    
+    $stmt3 = $conn->prepare("SELECT id FROM client_progress WHERE client_id = ?");
+    $stmt3->bind_param("i", $client_id);
+    $stmt3->execute();
+    $exists = $stmt3->get_result();
+
+    if ($exists->num_rows > 0) {
+        $stmt4 = $conn->prepare("UPDATE client_progress SET onboard=?, presprint=?, sprint=?, client_view=?, sprint_week_focus=?, updated_at=NOW() WHERE client_id=?");
+        $stmt4->bind_param("ssssii", $onboard, $presprint, $sprint, $client_view, $sprint_week_focus, $client_id); 
+        $stmt4->execute();
+    } else {
+        $stmt5 = $conn->prepare("INSERT INTO client_progress (client_id, onboard, presprint, sprint, client_view, sprint_week_focus) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt5->bind_param("issssi", $client_id, $onboard, $presprint, $sprint, $client_view, $sprint_week_focus);
+        $stmt5->execute();
+    }
+
+    // Muat ulang data
+    $stmt2->execute(); $res2 = $stmt2->get_result(); $progress_data = $res2->fetch_assoc();
+    $db_client_view_saved = $progress_data['client_view'] ?? 'none'; 
+    $sprint_week_focus = $progress_data['sprint_week_focus'] ?? 1;
+    $onboard_data   = $progress_data ? json_decode($progress_data['onboard'], true)   : [];
+    $presprint_data = $progress_data ? json_decode($progress_data['presprint'], true) : [];
+    $sprint_data    = $progress_data ? json_decode($progress_data['sprint'], true)    : [];
+    
+    $display_success = '<div class="success">Progress berhasil disimpan.</div>';
+}
+
+// Menampilkan pesan sukses / error dari URL (GET)
+$view = $_GET['view'] ?? 'onboard';
+$display_success = '';
+ 
 
 ?>
 <!DOCTYPE html>
@@ -187,12 +156,29 @@ button:hover { background:#1e7e34; }
             <option value="sprint" <?= $db_client_view_saved=='sprint'?'selected':'' ?>>Sprint Week</option>
         </select>
         
+        <div id="sprint-week-focus" style="display: <?= $db_client_view_saved=='sprint'?'block':'none' ?>; margin-bottom: 20px;">
+            <h3>Fokus Tampilan Sprint Week</h3>
+            <select name="sprint_week_focus" style="width: 300px;">
+                <option value="1" <?= $sprint_week_focus==1?'selected':'' ?>>Week 1</option>
+                <option value="2" <?= $sprint_week_focus==2?'selected':'' ?>>Week 2</option>
+                <option value="3" <?= $sprint_week_focus==3?'selected':'' ?>>Week 3</option>
+                <option value="4" <?= $sprint_week_focus==4?'selected':'' ?>>Week 4</option>
+            </select>
+        </div>
+        
+        <script>
+        // Show/hide sprint week focus based on client_view selection
+        document.querySelector('select[name="client_view"]').addEventListener('change', function() {
+            document.getElementById('sprint-week-focus').style.display = this.value === 'sprint' ? 'block' : 'none';
+        });
+        </script>
+        
 
         <?php if ($view=='onboard'): ?> <h3>On Board</h3>
         <table>
-            <tr><th>Tahapan</th><th>Tanggal</th><th>Status</th><th>Deskripsi</th></tr> 
+            <tr><th>Tahapan</th><th>Tanggal</th><th>Status</th></tr> 
             <?php
-            $onboard_steps = ['Kick Off','Roadmap & Visual Concept Development','Present'];
+            $onboard_steps = ['Kick-off Meeting','Roadmap & Visual Concept Development','Visit Concept Development','Site Visit'];
             foreach ($onboard_steps as $i => $step):
                 $saved = $onboard_data[$i] ?? ['date'=>'','status'=>'pending', 'description'=>''];
             ?>
@@ -206,9 +192,6 @@ button:hover { background:#1e7e34; }
                         <option value="completed" <?= $saved['status']=='completed'?'selected':'' ?>>Completed</option>
                     </select>
                 </td>
-                <td>
-                    <textarea name="onboard[<?= $i ?>][description]" placeholder="Deskripsi untuk klien"><?= htmlspecialchars($saved['description']) ?></textarea>
-                </td>
             </tr>
             <?php endforeach; ?>
         </table>
@@ -216,7 +199,7 @@ button:hover { background:#1e7e34; }
 
         <?php if ($view=='presprint'): ?> <h3>Pre-Sprint</h3>
         <table>
-            <tr><th>Tahapan</th><th>Tanggal</th><th>Status</th><th>Deskripsi</th></tr> 
+            <tr><th>Tahapan</th><th>Tanggal</th><th>Status</th></tr> 
             <?php
             $pre_steps = ['Visit Concept','Site Visit Date Option','Visit Day'];
             foreach ($pre_steps as $i => $step):
@@ -232,57 +215,75 @@ button:hover { background:#1e7e34; }
                         <option value="completed" <?= $saved['status']=='completed'?'selected':'' ?>>Completed</option>
                     </select>
                 </td>
-                <td>
-                    <textarea name="presprint[<?= $i ?>][description]" placeholder="Deskripsi untuk klien"><?= htmlspecialchars($saved['description']) ?></textarea>
-                </td>
             </tr>
             <?php endforeach; ?>
         </table>
         <?php endif; ?>
 
-        <?php if ($view=='sprint'): ?> <h3>Sprint Week</h3>
+        <?php if ($view=='sprint'): ?> <h3>Sprint Week - Input untuk 4 Minggu</h3>
+        <?php 
+        $phase_names = ['Content Planning', 'Content Development', 'Internal Clinic (QC)', 'Preview & Revision'];
+        for ($week=0; $week<4; $week++): 
+        ?>
+        <h4 style="margin-top: 20px; color: #007bff;">Week <?= $week+1 ?></h4>
         <table>
-            <tr><th>Minggu</th><th>Tanggal</th><th>Status</th><th>Deskripsi</th></tr> 
-            <?php for ($i=0;$i<4;$i++): 
-                $saved = $sprint_data[$i] ?? ['date'=>'','status'=>'pending', 'description'=>''];
+            <tr><th>Phase</th><th>Tanggal</th><th>Status</th></tr> 
+            <?php foreach ($phase_names as $phase_idx => $phase_name): 
+                $saved = $sprint_data[$week]['phases'][$phase_idx] ?? ['date'=>'','status'=>'pending'];
             ?>
             <tr>
-                <td>Minggu ke-<?= $i+1 ?></td>
-                <td><input type="date" name="sprint[<?= $i ?>][date]" value="<?= htmlspecialchars($saved['date']) ?>"></td>
+                <td><?= $phase_name ?></td>
+                <td><input type="date" name="sprint[<?= $week ?>][phases][<?= $phase_idx ?>][date]" value="<?= htmlspecialchars($saved['date']) ?>"></td>
                 <td>
-                    <select name="sprint[<?= $i ?>][status]">
+                    <select name="sprint[<?= $week ?>][phases][<?= $phase_idx ?>][status]">
                         <option value="pending"   <?= $saved['status']=='pending'?'selected':'' ?>>Pending</option>
                         <option value="ongoing"   <?= $saved['status']=='ongoing'?'selected':'' ?>>Ongoing</option>
                         <option value="completed" <?= $saved['status']=='completed'?'selected':'' ?>>Completed</option>
                     </select>
                 </td>
-                <td>
-                    <textarea name="sprint[<?= $i ?>][description]" placeholder="Deskripsi untuk klien"><?= htmlspecialchars($saved['description']) ?></textarea>
-                </td>
             </tr>
-            <?php endfor; ?>
+            <?php endforeach; ?>
         </table>
+        <?php endfor; ?>
         <?php endif; ?>
 
         <button type="submit">Simpan Progress</button>
     </form>
+
+    <!-- Admin Notes Section -->
+    <div style="margin-top: 40px; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+        <h3 style="color: #fff; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Notes / Catatan</h3>
+        
+        <!-- Notes List -->
+        <div style="max-height: 300px; overflow-y: auto; margin-bottom: 20px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 4px;">
+            <?php if (!empty($admin_notes)): ?>
+                <?php foreach ($admin_notes as $note): ?>
+                    <div style="background: rgba(255,255,255,0.03); padding: 12px 15px; margin-bottom: 10px; border-radius: 6px; border-left: 3px solid <?= $note['created_by'] === 'admin' ? '#00ff88' : '#fff' ?>;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <span style="display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; background: <?= $note['created_by'] === 'admin' ? '#00ff88' : '#fff' ?>; color: #000;">
+                                <?= $note['created_by'] === 'admin' ? '👤 ADMIN' : '👤 CLIENT' ?>
+                            </span>
+                            <span style="color: #888; font-size: 12px;"><?= date('d M Y H:i', strtotime($note['created_at'])) ?></span>
+                        </div>
+                        <div style="color: #ddd; line-height: 1.5; font-size: 14px;"><?= nl2br(htmlspecialchars($note['note_text'])) ?></div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p style="color: #888; text-align: center; padding: 20px;">Belum ada catatan</p>
+            <?php endif; ?>
+        </div>
+
+        <!-- Add Note Form -->
+        <form method="post" style="margin: 0;">
+            <textarea name="admin_note_text" placeholder="Tulis catatan untuk client..." required
+                style="width: 100%; min-height: 80px; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: #fff; font-family: 'Poppins', sans-serif; font-size: 14px; resize: vertical; box-sizing: border-box;"></textarea>
+            <button type="submit" name="save_admin_note" value="1" 
+                style="margin-top: 10px; padding: 10px 20px; background: #00ff88; color: #000; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 14px;">
+                Kirim Catatan
+            </button>
+        </form>
+    </div>
     
-    <form method="post" style="margin-top: 30px;">
-        <input type="hidden" name="action" value="archive">
-        
-        <h3 style="border-bottom: 0;">Arsipkan Progres Saat Ini</h3>
-        <p style="margin-top: 5px; margin-bottom: 10px;">Pilih fase yang sudah selesai dan siap diarsipkan:</p>
-        
-        <select name="phase_to_archive" required style="width: 300px; margin-right: 10px;">
-            <option value="sprint">Sprint Week</option>
-        </select>
-        
-        <button type="submit" class="archive-btn" 
-                onclick="return confirm('PERINGATAN! Tindakan ini akan mengarsipkan data fase Sprint Week dan MENGOSONGKAN data tersebut di tampilan aktif klien. Lanjutkan?')"
-        >
-            Arsipkan Fase & Reset
-        </button>
-    </form>
 </div>
 </body>
 </html>
