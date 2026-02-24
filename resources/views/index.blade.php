@@ -75,9 +75,9 @@
 <div class="controls-top-right">
 
     <div class="nav-menu-container" id="navMenu">
-        <a href="#">Team</a>
-        <a href="#">Work</a>
         <a href="#">Home</a>
+        <a href="#">Work</a>
+        <a href="#">Team</a>
         <a href="/client-progress/login.php">Tracking</a>
     </div>
 
