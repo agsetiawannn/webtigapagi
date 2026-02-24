@@ -4,68 +4,69 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tigapagi</title>
-    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}?v={{ time() }}">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self';">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <style>
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease-out;
-            overflow: hidden;
-        }
-        #loading-screen.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-        #loading-video {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
+        /* === INLINE HERO BACKGROUND FIX === */
+        .hero-bg-bottom {
+            z-index: 0;
+            background-image: url('{{ asset("img/BG.png") }}');
+            opacity: 0.95;
+            mix-blend-mode: normal;
+            -webkit-filter: blur(50px);
+            filter: blur(50px);
+            position: absolute;
+            inset: 0;
+            background-size: 200% auto;
+            background-position: 0% center;
+            background-repeat: repeat-x;
+            animation: pan 6s linear infinite;
         }
         
-        /* Desktop (Landscape) - Show horizontal video */
-        @media (orientation: landscape) {
-            #loading-video-vertical {
-                display: none;
-            }
-            #loading-video-horizontal {
-                display: block;
-            }
+        .hero-bg-top {
+            z-index: 1;
+            background-image: url('{{ asset("img/BG2.png") }}');
+            opacity: 0.35;
+            mix-blend-mode: normal;
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
         
-        /* Mobile (Portrait) - Show vertical video */
-        @media (orientation: portrait) {
-            #loading-video-horizontal {
-                display: none;
-            }
-            #loading-video-vertical {
-                display: block;
-            }
+        .section-footer .footer-bg-bottom {
+            z-index: 0;
+            background-image: url('{{ asset("img/Footer.png") }}');
+            opacity: 0.95;
+            mix-blend-mode: normal;
+            -webkit-filter: blur(150px);
+            filter: blur(150px);
+            position: absolute;
+            inset: 0;
+            background-size: 600% auto;
+            background-position: 700%;
+            background-repeat: repeat-x;
+            animation: pan 20s linear infinite;
+        }
+        
+        .section-footer .footer-bg-top {
+            z-index: 1;
+            background-image: url('{{ asset("img/B.png") }}');
+            opacity: 0.35;
+            mix-blend-mode: normal;
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
     </style>
 </head>
 <body>
-
-<!-- Loading Screen -->
-<div id="loading-screen">
-    <video id="loading-video-horizontal" class="loading-video" autoplay muted playsinline>
-        <source src="{{ asset('img/load.mp4') }}" type="video/mp4">
-    </video>
-    <video id="loading-video-vertical" class="loading-video" autoplay muted playsinline>
-        <source src="{{ asset('img/load2.mp4') }}" type="video/mp4">
-    </video>
-</div>
 
 <div class="logo-top-left" >
     <img class="logo-img" src="{{ asset('img/tb.png') }}">
@@ -77,7 +78,7 @@
         <a href="#">Team</a>
         <a href="#">Work</a>
         <a href="#">Home</a>
-        <a href="/login.php">Tracking</a>
+        <a href="/client-progress/login.php">Tracking</a>
     </div>
 
     <button aria-label="Menu" onclick="toggleMenu()" class="btn--icon" id="menuBtn">
@@ -86,7 +87,7 @@
         <span class="bar"></span>
     </button>
 
-    <a href="https://wa.me/089638893601" class="btn" title="Contact" target="_blank" rel="noopener noreferrer">
+    <a href="https://api.whatsapp.com/send/?phone=6289638893601&text&type=phone_number&app_absent=0" class="btn" title="Contact" target="_blank" rel="noopener noreferrer">
         <img src="{{ asset('img/wa.png') }}" alt="WhatsApp" style="width:18px;height:18px;border-radius:50%;display:inline-block;object-fit:cover;" />
         Contact
     </a>
@@ -282,31 +283,6 @@ function toggleMenu(){
     const expanded = navMenu.classList.contains('active');
     menuBtn.setAttribute('aria-expanded', expanded);
 }
-
-// Loading Screen Handler
-window.addEventListener('load', function() {
-    const loadingScreen = document.getElementById('loading-screen');
-    const videoHorizontal = document.getElementById('loading-video-horizontal');
-    const videoVertical = document.getElementById('loading-video-vertical');
-    
-    function hideLoadingScreen() {
-        loadingScreen.classList.add('fade-out');
-        setTimeout(function() {
-            loadingScreen.style.display = 'none';
-        }, 500);
-    }
-    
-    // Hide loading screen when active video ends
-    videoHorizontal.addEventListener('ended', hideLoadingScreen);
-    videoVertical.addEventListener('ended', hideLoadingScreen);
-    
-    // Fallback: hide after 5 seconds if video doesn't end
-    setTimeout(function() {
-        if (loadingScreen.style.display !== 'none') {
-            hideLoadingScreen();
-        }
-    }, 5000);
-});
 </script>
 
 </body>

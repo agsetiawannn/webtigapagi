@@ -57,3 +57,12 @@
         height: 250px;
     }
 }
+
+@media(max-width: 480px) {
+    .running-container {
+        animation-duration: 12s;
+    }
+    .running-animation {
+        height: 200px;
+    }
+}

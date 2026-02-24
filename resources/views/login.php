@@ -3,11 +3,13 @@ session_start();
 include __DIR__ . '/db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $email = trim($_POST['email']);
 
-    // ambil data client aktif berdasarkan email
-    $sql = "SELECT * FROM clients WHERE email='$email' AND status='active'";
-    $result = $conn->query($sql);
+    // ambil data client aktif berdasarkan email menggunakan prepared statement
+    $stmt = $conn->prepare("SELECT * FROM clients WHERE email = ? AND status = 'active'");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result && $result->num_rows == 1) {
         $client = $result->fetch_assoc();
@@ -21,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $error = "Email tidak terdaftar.";
     }
+    $stmt->close();
 }
 ?>
 <!DOCTYPE html>

@@ -83,27 +83,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['save_admin_note'])) 
     if ($exists->num_rows > 0) {
         $stmt4 = $conn->prepare("UPDATE client_progress SET onboard=?, presprint=?, sprint=?, client_view=?, sprint_week_focus=?, updated_at=NOW() WHERE client_id=?");
         $stmt4->bind_param("ssssii", $onboard, $presprint, $sprint, $client_view, $sprint_week_focus, $client_id); 
-        $stmt4->execute();
+        if (!$stmt4->execute()) {
+            die("Error updating: " . $stmt4->error);
+        }
     } else {
         $stmt5 = $conn->prepare("INSERT INTO client_progress (client_id, onboard, presprint, sprint, client_view, sprint_week_focus) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt5->bind_param("issssi", $client_id, $onboard, $presprint, $sprint, $client_view, $sprint_week_focus);
-        $stmt5->execute();
+        if (!$stmt5->execute()) {
+            die("Error inserting: " . $stmt5->error);
+        }
     }
 
-    // Muat ulang data
-    $stmt2->execute(); $res2 = $stmt2->get_result(); $progress_data = $res2->fetch_assoc();
-    $db_client_view_saved = $progress_data['client_view'] ?? 'none'; 
-    $sprint_week_focus = $progress_data['sprint_week_focus'] ?? 1;
-    $onboard_data   = $progress_data ? json_decode($progress_data['onboard'], true)   : [];
-    $presprint_data = $progress_data ? json_decode($progress_data['presprint'], true) : [];
-    $sprint_data    = $progress_data ? json_decode($progress_data['sprint'], true)    : [];
+    // Clear any output buffering
+    if (ob_get_level()) ob_end_clean();
     
-    $display_success = '<div class="success">Progress berhasil disimpan.</div>';
+    // Redirect untuk memastikan data ter-refresh
+    header("Location: " . $_SERVER['PHP_SELF'] . "?client_id=" . $client_id . "&view=" . ($_GET['view'] ?? 'onboard') . "&success=1");
+    exit();
 }
 
 // Menampilkan pesan sukses / error dari URL (GET)
 $view = $_GET['view'] ?? 'onboard';
 $display_success = '';
+if (isset($_GET['success']) && $_GET['success'] == '1') {
+    $display_success = '<div class="success">Progress berhasil disimpan dan akan langsung terlihat di dashboard klien.</div>';
+}
  
 
 ?>

@@ -51,4 +51,9 @@ Route::any('/logout.php', function () {
     exit;
 })->withoutMiddleware(['web']);
 
+Route::any('/test_db.php', function () {
+    include resource_path('views/test_db.php');
+    exit;
+})->withoutMiddleware(['web']);
+
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');

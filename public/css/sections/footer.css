@@ -29,7 +29,7 @@
 /* === LAPISAN FOOTER === */
 .section-footer .footer-bg-bottom {
     z-index: 0;
-    background-image: url('/img/Footer.png');
+    background-image: url('../../img/Footer.png');
     opacity: 0.95;
     mix-blend-mode: normal;
     -webkit-filter: blur(150px);
@@ -44,7 +44,7 @@
 
 .section-footer .footer-bg-top {
     z-index: 1;
-    background-image: url('/img/B.png');
+    background-image: url('../../img/B.png');
     opacity: 0.35;
     mix-blend-mode: normal;
     position: absolute;
@@ -277,6 +277,7 @@
     }
     .section-footer .footer-right {
         align-items: center;
+        margin-right: 0;
     }
     .section-footer .footer-bottom {
         padding: 20px;
@@ -288,5 +289,86 @@
         flex-direction: column;
         gap: 10px;
         align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-footer {
+        min-height: auto;
+    }
+    
+    .section-footer .footer-content {
+        padding: 30px 16px;
+        gap: 30px;
+    }
+    
+    .section-footer .footer-left {
+        gap: 30px;
+    }
+    
+    .section-footer .footer-section-title {
+        font-size: 15px;
+        margin: 0 0 8px 0;
+    }
+    
+    .section-footer .footer-socials {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+    }
+    
+    .section-footer .social-item {
+        font-size: 14px;
+        gap: 10px;
+    }
+    
+    .section-footer .social-item img {
+        width: 38px;
+        height: 38px;
+    }
+    
+    .section-footer .footer-contact-row {
+        gap: 20px;
+    }
+    
+    .section-footer .footer-contact-left {
+        gap: 20px;
+    }
+    
+    .section-footer .contact-item h4 {
+        font-size: 14px;
+    }
+    
+    .section-footer .contact-item p {
+        font-size: 13px;
+    }
+    
+    .section-footer .footer-location-text {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    
+    .section-footer .footer-logo img {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .section-footer .footer-bottom {
+        padding: 16px;
+        gap: 12px;
+    }
+    
+    .section-footer .footer-bottom-left {
+        gap: 8px;
+    }
+    
+    .section-footer .footer-link,
+    .section-footer .footer-link-text,
+    .section-footer .footer-copyright {
+        font-size: 12px;
+    }
+    
+    .section-footer .footer-copyright {
+        margin-right: 0;
     }
 }

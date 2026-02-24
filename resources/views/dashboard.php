@@ -34,15 +34,20 @@ while ($row = $notes_result->fetch_assoc()) {
 } 
 
 // --- Ambil data progres detail dan preferensi tampilan (Current Progress) ---
+// Force fresh data - no cache
 $stmt = $conn->prepare("
-    SELECT onboard, presprint, sprint, client_view, sprint_week_focus
+    SELECT onboard, presprint, sprint, client_view, sprint_week_focus, updated_at
     FROM client_progress
     WHERE client_id = ?
+    LIMIT 1
 ");
 $stmt->bind_param("i", $client_id);
 $stmt->execute();
 $res = $stmt->get_result();
 $progress_data = $res->fetch_assoc();
+
+// Debug: Log last update time (optional - comment out in production)
+// if ($progress_data) error_log("Dashboard loaded - Last Update: " . ($progress_data['updated_at'] ?? 'N/A'));
 
 // --- Logika Data PHP ---
 $section_phase_title = "Proyek Progress"; 
@@ -93,6 +98,9 @@ if ($progress_data) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Tracking - Client</title>
     <style>
         /* BASE STYLES & HEADER (Tidak diubah, untuk konsistensi) */

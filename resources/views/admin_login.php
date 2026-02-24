@@ -6,29 +6,28 @@ session_start();
 include __DIR__ . '/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
     // PENTING: Cek dulu koneksi
     if ($conn->connect_error) {
         die("Koneksi ke db.php GAGAL: " . $conn->connect_error);
     }
 
-    // Kode ini sudah benar
-    $result = $conn->query("SELECT * FROM admin WHERE username='$username' AND password=MD5('$password')");
+    // Gunakan prepared statement untuk keamanan
+    $stmt = $conn->prepare("SELECT * FROM admin WHERE username = ? AND password = MD5(?)");
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
     
     if ($result && $result->num_rows === 1) {
         $_SESSION['admin'] = $username;
         header('Location: admin_dashboard.php');
         exit();
     } else {
-        // Tampilkan juga error SQL jika query-nya yang salah
-        if(!$result) {
-            $error = "Error Query: " . $conn->error;
-        } else {
-            $error = "Username atau password salah.";
-        }
+        $error = "Username atau password salah.";
     }
+    $stmt->close();
 }
 ?>
 <!DOCTYPE html>

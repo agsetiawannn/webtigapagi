@@ -139,3 +139,25 @@
         width: 100%;
     }
 }
+
+@media(max-width: 480px) {
+    .section-works {
+        padding: 30px 16px 50px;
+    }
+    .section-works h2 {
+        font-size: 24px;
+        margin: 0 0 30px;
+        letter-spacing: -0.5px;
+    }
+    .section-works .intro {
+        font-size: 14px;
+    }
+    .section-works .hr-line {
+        margin: 14px 0 16px 0;
+    }
+    .section-works .card {
+        font-size: 13px;
+        padding: 11px 14px;
+        border-radius: 8px;
+    }
+}

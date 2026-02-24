@@ -13,28 +13,32 @@ $client_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $error_msg = "";
 $success_msg = "";
 
-// LOGIKA UPDATE
+// LOGIKA UPDATE menggunakan prepared statement
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_client'])) {
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $status = mysqli_real_escape_string($conn, $_POST['status']);
+    $name = trim($_POST['name']);
+    $email = trim($_POST['email']);
+    $status = trim($_POST['status']);
 
-    $sql = "UPDATE clients 
-            SET name = '$name', email = '$email', status = '$status'
-            WHERE id = $client_id";
+    $stmt = $conn->prepare("UPDATE clients SET name = ?, email = ?, status = ? WHERE id = ?");
+    $stmt->bind_param("sssi", $name, $email, $status, $client_id);
 
-    if ($conn->query($sql)) {
+    if ($stmt->execute()) {
         $success_msg = "Detail klien berhasil diperbarui! <a href='admin_dashboard.php'>Kembali</a>";
     } else {
-        $error_msg = "Gagal memperbarui: " . $conn->error;
+        $error_msg = "Gagal memperbarui: " . $stmt->error;
     }
+    $stmt->close();
 }
 
-// AMBIL DATA KLIEN (untuk mengisi form)
+// AMBIL DATA KLIEN (untuk mengisi form) menggunakan prepared statement
 if ($client_id > 0) {
-    $result = $conn->query("SELECT * FROM clients WHERE id = $client_id");
+    $stmt = $conn->prepare("SELECT * FROM clients WHERE id = ?");
+    $stmt->bind_param("i", $client_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
     if ($result && $result->num_rows === 1) {
         $client = $result->fetch_assoc();
+        $stmt->close();
     } else {
         die("Klien tidak ditemukan.");
     }
