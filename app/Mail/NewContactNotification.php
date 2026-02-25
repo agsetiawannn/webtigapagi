@@ -13,6 +13,11 @@ class NewContactNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
+    /**
+     * The contact instance.
+     *
+     * @var \App\Models\Contact
+     */
     public $contact;
 
     /**

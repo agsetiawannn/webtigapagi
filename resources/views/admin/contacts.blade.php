@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="30">
     <title>Admin - Manage Contacts | Tigapagi</title>
     <style>
         * {
@@ -192,10 +193,10 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>📧 Contact Management</h1>
+            <h1>Contact Management</h1>
             <p>View and manage all contact form submissions</p>
             <div class="header-buttons">
-                <a href="/client-progress/admin_dashboard.php" class="btn-dashboard">← Back to Admin Dashboard</a>
+                <a href="{{ url('/tracking/admin_dashboard.php') }}" class="btn-dashboard">← Back to Admin Dashboard</a>
             </div>
         </div>
         

@@ -6,6 +6,7 @@ use App\Models\Contact;
 use App\Mail\NewContactNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class ContactController extends Controller
@@ -47,7 +48,7 @@ class ContactController extends Controller
             Mail::to($adminEmail)->send(new NewContactNotification($contact));
         } catch (\Exception $e) {
             // Log error but don't fail the submission
-            \Log::error('Failed to send contact notification email: ' . $e->getMessage());
+            Log::error('Failed to send contact notification email: ' . $e->getMessage());
         }
 
         return redirect()->back()->with('success', 'Your message has been sent successfully!');

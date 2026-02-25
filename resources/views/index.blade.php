@@ -78,7 +78,7 @@
         <a href="{{ url('/') }}">Home</a>
         <a href="#">Work</a>
         <a href="#">Team</a>
-        <a href="/client-progress/login.php">Tracking</a>
+        <a href="{{ url('/tracking/login.php') }}">Tracking</a>
     </div>
 
     <button aria-label="Menu" onclick="toggleMenu()" class="btn--icon" id="menuBtn">
