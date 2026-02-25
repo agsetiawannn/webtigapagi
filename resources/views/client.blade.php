@@ -20,7 +20,7 @@
 <div class="controls-top-right">
 
     <div class="nav-menu-container" id="navMenu">
-        <a href="/">Home</a>
+        <a href="{{ url('/') }}">Home</a>
         <a href="#Work">Work</a>
         <a href="#Clients">Clients</a>
     </div>

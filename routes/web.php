@@ -56,4 +56,9 @@ Route::any('/test_db.php', function () {
     exit;
 })->withoutMiddleware(['web']);
 
+// Contact Routes
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+// Admin Contact Management Routes
+Route::get('/admin/contacts', [ContactController::class, 'index'])->name('admin.contacts');
+Route::delete('/admin/contacts/{id}', [ContactController::class, 'destroy'])->name('admin.contacts.destroy');

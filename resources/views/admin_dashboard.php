@@ -100,11 +100,18 @@ $active_clients = $conn->query("SELECT id, name FROM clients WHERE status='activ
         a.btn-edit { background: #198754; }
         a.btn-delete { background: #dc3545; }
         a.btn-delete:hover { background: #c82333; }
+        .nav-buttons { margin: 20px 0; display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn-contact { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 500; transition: transform 0.2s; }
+        .btn-contact:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); }
     </style>
 </head>
 <body>
 <h2>Admin Dashboard</h2>
 <p>Login sebagai <b><?= htmlspecialchars($_SESSION['admin']) ?></b> | <a href="logout.php">Logout</a></p>
+
+<div class="nav-buttons">
+    <a href="/admin/contacts" class="btn-contact">Kelola Kontak</a>
+</div>
 
 <?php if ($error_msg): ?><div class="msg error"><?= $error_msg ?></div><?php endif; ?>
 <?php if ($success_msg): ?><div class="msg success"><?= $success_msg ?></div><?php endif; ?>

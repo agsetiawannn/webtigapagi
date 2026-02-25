@@ -133,12 +133,11 @@ if ($progress_data) {
         .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
         
         /* HEADER */
-        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
         .header-left h1 { font-size: 48px; font-weight: 700; margin: 0 0 8px 0; color: #fff; letter-spacing: -0.5px; }
         .header-left p { font-size: 17px; color: rgba(255, 255, 255, 0.8); margin: 0; }
-        .header-right { display: flex; align-items: center; gap: 10px; }
-        .header-right .logo-img { height: 40px; width: auto; }
-        .header-right .logo-text { font-size: 24px; font-weight: 700; color: #fff; letter-spacing: 1.5px; }
+        .header-right { display: flex; align-items: center; }
+        .header-right .logo-img { height: 50px; width: auto; }
 
         /* PROGRESS TABLE (Tidak diubah) */
         .progress-table-container { background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(10px); border-radius: 16px; overflow: hidden; border: 1.5px solid rgba(255, 255, 255, 0.2); margin-bottom: 30px; }
@@ -265,6 +264,124 @@ if ($progress_data) {
             width: 100%;
         }
 
+        /* =================================================================== */
+        /* MOBILE RESPONSIVE STYLES */
+        /* =================================================================== */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            /* Header - Keep horizontal on mobile */
+            .header {
+                align-items: center;
+                margin-bottom: 30px;
+            }
+
+            /* Header Left - Reduce sizes */
+            .header-left h1 {
+                font-size: 28px;
+                line-height: 1.2;
+                margin: 0;
+            }
+
+            .header-left p {
+                font-size: 13px;
+            }
+
+            /* Header Right - Adjust logo */
+            .header-right .logo-img {
+                height: 35px;
+            }
+
+            /* Progress Table */
+            .progress-table th,
+            .progress-table td {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+
+            .progress-table th {
+                font-size: 15px;
+            }
+
+            /* Action Buttons */
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+                font-size: 14px;
+                padding: 12px 16px;
+            }
+
+            /* Notes Container */
+            .notes-container::before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            /* Sprint Calendar */
+            .sprint-calendar-container {
+                padding: 15px;
+                overflow-x: auto;
+            }
+
+            .sprint-calendar-container::before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .sprint-table {
+                font-size: 12px;
+            }
+
+            .sprint-table th,
+            .sprint-table td {
+                padding: 8px 5px;
+                font-size: 11px;
+            }
+
+            .sprint-table .week-day-header {
+                width: 80px;
+            }
+
+            .task-box {
+                font-size: 10px;
+                padding: 4px 6px;
+            }
+        }
+
+        /* Extra small mobile devices */
+        @media (max-width: 480px) {
+            .header-left h1 {
+                font-size: 24px;
+            }
+
+            .header-left p {
+                font-size: 12px;
+            }
+
+            .header-right .logo-img {
+                height: 30px;
+            }
+
+            .progress-table th,
+            .progress-table td {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .sprint-table th,
+            .sprint-table td {
+                padding: 6px 4px;
+                font-size: 10px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -277,8 +394,7 @@ if ($progress_data) {
             <p>Hi "<?= $name ?>", here's your progres</p> 
         </div>
         <div class="header-right">
-            <img src="../img/TP.png" alt="TP" class="logo-img">
-            <span class="logo-text">TIGAPAGI</span>
+            <img src="../img/Exclude.png" alt="Tigapagi Logo" class="logo-img">
         </div>
     </div>
     
