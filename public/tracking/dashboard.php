@@ -158,14 +158,34 @@ if ($progress_data) {
         .status-pending::after { content: '✕'; font-size: 16px; }
 
         /* ACTION BUTTONS & NOTES (Dipertahankan) */
-        .action-buttons { display: flex; gap: 15px; margin-top: 0; margin-bottom: 20px; }
+        .action-buttons { display: flex; gap: 15px; margin-top: 0; margin-bottom: 20px; flex-wrap: wrap; }
         .btn { padding: 10px 20px; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
         .btn-logout { background: #00ff88; color: #000; }
         .btn-notes, .btn-sprint-date { background: rgba(40, 40, 40, 0.9); color: #fff; border: 2px solid rgba(255, 255, 255, 0.3); }
         .btn-notes svg, .btn-sprint-date svg { width: 16px; height: 16px; }
         
+        /* Sprint calendar inside action-buttons */
+        .action-buttons .sprint-calendar-container {
+            width: 100%;
+            margin-top: 5px;
+        }
+        
         /* NOTES AREA (Dipertahankan) */
-        .notes-container { margin-top: 20px; position: relative; width: 100%; }
+        .notes-container { 
+            margin-top: 20px; 
+            position: relative; 
+            width: 100%; 
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: max-height 0.4s ease, opacity 0.3s ease, transform 0.3s ease;
+        }
+        .notes-container.show {
+            max-height: 1000px;
+            opacity: 1;
+            transform: translateY(0);
+        }
         .notes-container::before { content: ''; position: absolute; top: -14px; left: 160px; width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-bottom: 14px solid rgba(45, 45, 45, 0.95); z-index: 10; }
         .notes-textarea { width: 100%; min-height: 120px; background: rgba(45, 45, 45, 0.95); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 16px; color: rgba(255, 255, 255, 0.8); font-size: 14px; font-family: inherit; resize: vertical; outline: none; }
 
@@ -183,22 +203,26 @@ if ($progress_data) {
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 20px;
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: max-height 0.4s ease, opacity 0.3s ease, transform 0.3s ease, padding 0.4s ease;
+        }
+        .sprint-calendar-container.show {
+            max-height: 2000px;
+            opacity: 1;
+            transform: translateY(0);
+            padding: 20px;
+        }
+        .sprint-calendar-container:not(.show) {
+            padding: 0;
         }
 
-        /* Bubble pointer untuk tombol Sprint Week Date */
+        /* Hide bubble pointer when inside action-buttons */
         .sprint-calendar-container::before {
-            content: '';
-            position: absolute;
-            top: -14px;
-            /* Kalkulasi posisi bubble: Tombol Notes + Gap + Tombol Sprint / 2 + Margin Kiri */
-            left: calc(160px + 15px + 140px); /* Perlu disesuaikan tergantung lebar tombol */
-            width: 0;
-            height: 0;
-            border-left: 14px solid transparent;
-            border-right: 14px solid transparent;
-            border-bottom: 14px solid rgba(15, 15, 15, 0.95);
-            z-index: 10;
+            display: none;
         }
+        
 
         .sprint-table {
             width: 100%;
@@ -319,6 +343,24 @@ if ($progress_data) {
                 padding: 12px 16px;
             }
 
+            /* Reorder buttons: Notes, Sprint Date, Sprint Calendar, Logout */
+            .btn-logout {
+                order: 4;
+            }
+
+            .btn-notes {
+                order: 1;
+            }
+
+            .btn-sprint-date {
+                order: 2;
+            }
+
+            .action-buttons .sprint-calendar-container {
+                order: 3;
+                margin-top: 0;
+            }
+
             /* Notes Container */
             .notes-container::before {
                 left: 50%;
@@ -329,11 +371,6 @@ if ($progress_data) {
             .sprint-calendar-container {
                 padding: 15px;
                 overflow-x: auto;
-            }
-
-            .sprint-calendar-container::before {
-                left: 50%;
-                transform: translateX(-50%);
             }
 
             .sprint-table {
@@ -448,7 +485,7 @@ if ($progress_data) {
             <a href="logout.php" class="btn btn-logout">Log out</a>
         </div>
         
-        <div id="notes-area" class="notes-container" style="display: none;"> 
+        <div id="notes-area" class="notes-container"> 
             <div class="notes-list" style="margin-bottom: 20px; max-height: 300px; overflow-y: auto;">
                 <?php if (empty($notes)): ?>
                     <p style="color: rgba(255,255,255,0.5); font-size: 14px; text-align: center; padding: 20px;">Belum ada notes</p>
@@ -545,9 +582,12 @@ if ($progress_data) {
                 </svg>
                 Sprint Week Date
             </button>
+            <div id="sprint-calendar-area" class="sprint-calendar-container">
+                <img src="../img/date.png" alt="Sprint Week Date" style="width: 100%; height: auto; border-radius: 8px;">
+            </div>
         </div>
         
-        <div id="notes-area" class="notes-container" style="display: none;"> 
+        <div id="notes-area" class="notes-container"> 
             <div class="notes-list" style="margin-bottom: 20px; max-height: 300px; overflow-y: auto;">
                 <?php if (empty($notes)): ?>
                     <p style="color: rgba(255,255,255,0.5); font-size: 14px; text-align: center; padding: 20px;">Belum ada notes</p>
@@ -573,10 +613,6 @@ if ($progress_data) {
             </form>
         </div>
 
-        <div id="sprint-calendar-area" class="sprint-calendar-container" style="display: none;">
-            <img src="../img/date.png" alt="Sprint Week Date" style="width: 100%; height: auto; border-radius: 8px;">
-        </div>
-
     <?php 
     else: 
     // Tampilan Default (none)
@@ -591,12 +627,13 @@ if ($progress_data) {
         const calendarArea = document.getElementById('sprint-calendar-area');
         
         // Sembunyikan kalender saat Notes dibuka
-        calendarArea.style.display = 'none';
+        calendarArea.classList.remove('show');
 
-        if (notesArea.style.display === 'none') {
-            notesArea.style.display = 'block';
+        // Toggle Notes dengan animasi
+        if (notesArea.classList.contains('show')) {
+            notesArea.classList.remove('show');
         } else {
-            notesArea.style.display = 'none';
+            notesArea.classList.add('show');
         }
     }
     
@@ -605,12 +642,13 @@ if ($progress_data) {
         const notesArea = document.getElementById('notes-area');
         
         // Sembunyikan Notes saat kalender dibuka
-        notesArea.style.display = 'none';
+        notesArea.classList.remove('show');
 
-        if (calendarArea.style.display === 'none') {
-            calendarArea.style.display = 'block';
+        // Toggle Sprint Calendar dengan animasi
+        if (calendarArea.classList.contains('show')) {
+            calendarArea.classList.remove('show');
         } else {
-            calendarArea.style.display = 'none';
+            calendarArea.classList.add('show');
         }
     }
 </script>

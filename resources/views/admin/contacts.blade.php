@@ -13,56 +13,83 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            padding: 20px;
+            background-image: url('{{ asset("img/Cover 1.png") }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #fff;
+            padding: 40px 20px;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 0;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
         
         .header {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         
-        .header h1 {
-            color: #333;
-            margin-bottom: 10px;
+        .header-left h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            color: #fff;
+            letter-spacing: -0.5px;
         }
         
-        .header p {
-            color: #666;
-            margin-bottom: 15px;
+        .header-left p {
+            font-size: 17px;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
         }
         
         .header-buttons {
             display: flex;
             gap: 10px;
             margin-top: 15px;
+            margin-bottom: 30px;
             flex-wrap: wrap;
         }
         
         .btn-dashboard {
             display: inline-block;
-            padding: 10px 20px;
-            background: #333;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             color: white;
             text-decoration: none;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: all 0.2s;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .btn-dashboard:hover {
-            background: #555;
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.01);
         }
         
         .stats {
@@ -73,40 +100,47 @@
         }
         
         .stat-card {
-            background: white;
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(10px);
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
         }
         
         .stat-card h3 {
-            color: #667eea;
+            color: #00ff88;
             font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 10px;
+            font-weight: 600;
         }
         
         .stat-card .number {
             font-size: 36px;
             font-weight: bold;
-            color: #333;
+            color: #fff;
         }
         
         .contacts-table {
-            background: white;
-            border-radius: 12px;
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
             overflow-x: auto;
         }
         
         .table-header {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.2);
         }
         
         .table-header h2 {
-            color: #333;
+            color: #fff;
+            font-size: 24px;
+            font-weight: 600;
         }
         
         .btn {
@@ -118,17 +152,19 @@
             text-decoration: none;
             display: inline-block;
             transition: all 0.3s ease;
+            font-weight: 600;
         }
         
         .btn-delete {
             background: #dc3545;
             color: white;
             font-size: 12px;
-            padding: 6px 12px;
+            padding: 8px 16px;
         }
         
         .btn-delete:hover {
             background: #c82333;
+            transform: scale(1.01);
         }
         
         table {
@@ -137,55 +173,82 @@
         }
         
         th {
-            background: #f8f9fa;
-            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px 15px;
             text-align: left;
             font-weight: 600;
-            color: #495057;
-            border-bottom: 2px solid #dee2e6;
+            color: #fff;
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.2);
+            font-size: 16px;
         }
         
         td {
-            padding: 15px;
-            border-bottom: 1px solid #dee2e6;
-            color: #333;
+            padding: 18px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 15px;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
         }
         
         tr:hover {
-            background: #f8f9fa;
+            background: rgba(255, 255, 255, 0.05);
         }
         
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: #6c757d;
+            color: rgba(255, 255, 255, 0.6);
         }
         
         .empty-state h3 {
             margin-bottom: 10px;
-            color: #495057;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 24px;
         }
         
         .success-message {
-            background: #d4edda;
-            color: #155724;
+            background: rgba(209, 231, 221, 0.95);
+            color: #0f5132;
             padding: 15px 20px;
             border-radius: 8px;
             margin-bottom: 20px;
-            border: 1px solid #c3e6cb;
+            border: 1px solid #badbcc;
+            font-weight: 500;
         }
         
         @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+            
+            .header-left h1 {
+                font-size: 32px;
+            }
+            
+            .header-left p {
+                font-size: 15px;
+            }
+            
             .stats {
                 grid-template-columns: 1fr;
             }
             
+            .contacts-table {
+                padding: 20px;
+            }
+            
             table {
                 font-size: 14px;
+                display: block;
+                overflow-x: auto;
             }
             
             th, td {
-                padding: 10px;
+                padding: 12px 10px;
+                font-size: 14px;
             }
         }
     </style>
@@ -193,11 +256,14 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Contact Management</h1>
-            <p>View and manage all contact form submissions</p>
-            <div class="header-buttons">
-                <a href="{{ url('/tracking/admin_dashboard.php') }}" class="btn-dashboard">← Back to Admin Dashboard</a>
+            <div class="header-left">
+                <h1>Contact Management</h1>
+                <p>View and manage all contact form submissions</p>
             </div>
+        </div>
+        
+        <div class="header-buttons">
+            <a href="{{ url('/tracking/admin_dashboard.php') }}" class="btn-dashboard">← Back to Admin Dashboard</a>
         </div>
         
         <div class="stats">
