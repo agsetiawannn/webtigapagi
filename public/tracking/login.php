@@ -1,29 +1,49 @@
 <?php
+/**
+ * Client Login Page
+ * Login page untuk client tracking system
+ */
+
 session_start();
-include __DIR__ . '/db.php';
+require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/helpers.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = trim($_POST['email']);
+// Redirect if already logged in
+if (isset($_SESSION['client_id'])) {
+    redirectTo('dashboard.php');
+}
 
-    // ambil data client aktif berdasarkan email menggunakan prepared statement
-    $stmt = $conn->prepare("SELECT * FROM clients WHERE email = ? AND status = 'active'");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+$errorMessage = '';
 
-    if ($result && $result->num_rows == 1) {
-        $client = $result->fetch_assoc();
+// Handle login form submission
+if($_SERVER["REQUEST_METHOD"] === "POST") {
+    $email = sanitizeInput($_POST['email'] ?? '');
 
-        // simpan session
-        $_SESSION['client_id'] = $client['id'];
-        $_SESSION['client_name'] = $client['name'];
-
-        header("Location: dashboard.php");
-        exit();
+    // Validate email
+    if (!isValidEmail($email)) {
+        $errorMessage = 'Format email tidak valid.';
     } else {
-        $error = "Email tidak terdaftar.";
+        // Get active client by email
+        $stmt = $conn->prepare("SELECT id, name FROM clients WHERE email = ? AND status = 'active'");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result && $result->num_rows === 1) {
+            $client = $result->fetch_assoc();
+
+            // Set session
+            $_SESSION['client_id'] = $client['id'];
+            $_SESSION['client_name'] = $client['name'];
+
+            $stmt->close();
+            redirectTo('dashboard.php');
+        } else {
+            $errorMessage = 'Email tidak terdaftar atau tidak aktif.';
+        }
+        
+        $stmt->close();
     }
-    $stmt->close();
 }
 ?>
 <!DOCTYPE html>
@@ -32,173 +52,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Client - Studio Tigapagi</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-image: url('../img/Cover 1.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            position: relative;
-        }
-        
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1;
-        }
-        
-        .login-container {
-            position: relative;
-            z-index: 2;
-            background: rgba(30, 30, 30, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 50px 60px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 450px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .login-container h2 {
-            text-align: center;
-            color: #ffffff;
-            margin-bottom: 10px;
-            font-size: 28px;
-            font-weight: 600;
-        }
-        
-        .subtitle {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 40px;
-            font-size: 14px;
-        }
-        
-        .form-group {
-            margin-bottom: 30px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 12px;
-            color: #ffffff;
-            font-weight: 500;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-        }
-        
-        input[type="email"] {
-            width: 100%;
-            padding: 16px 20px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            font-size: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-        
-        input[type="email"]::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-        
-        input[type="email"]:focus {
-            border-color: #00ff88;
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
-        }
-        
-        button {
-            width: 100%;
-            padding: 16px;
-            background: #00ff88;
-            color: #000;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 10px;
-        }
-        
-        button:hover {
-            background: #00dd77;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.3);
-        }
-        
-        button:active {
-            transform: translateY(0);
-        }
-        
-        .error {
-            background: rgba(255, 77, 77, 0.15);
-            color: #ff6b6b;
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            text-align: center;
-            border: 1px solid rgba(255, 77, 77, 0.3);
-            font-size: 14px;
-        }
-        
-        .admin-link {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .admin-link a {
-            color: #00ff88;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .admin-link a:hover {
-            color: #00dd77;
-            text-decoration: underline;
-        }
-        
-        @media (max-width: 768px) {
-            .login-container {
-                padding: 40px 30px;
-                margin: 20px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../css/tracking/login.css">
 </head>
 <body>
     <div class="login-container">
         <h2>Client Login</h2>
         <p class="subtitle">Studio Tigapagi Tracking System</p>
         
-        <?php if (!empty($error)): ?>
-            <div class="error"><?= htmlspecialchars($error) ?></div>
-        <?php endif; ?>
+        <?= renderErrorMessage($errorMessage) ?>
         
         <form method="post">
             <div class="form-group">

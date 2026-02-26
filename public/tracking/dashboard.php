@@ -103,14 +103,13 @@ if ($progress_data) {
     <meta http-equiv="Expires" content="0">
     <meta http-equiv="refresh" content="30">
     <title>Tracking - Client</title>
-    <style>
-        /* BASE STYLES & HEADER (Tidak diubah, untuk konsistensi) */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            background-image: url('../img/Cover 1.png');
+    <link rel="stylesheet" href="../css/tracking/dashboard.css">
+</head>
+<body>
+
+<div class="container">
+    
+    <div class="header">
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;

@@ -5,66 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tigapagi</title>
     <link rel="stylesheet" href="{{ asset('css/main.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/index/index.css') }}?v={{ time() }}">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self';">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <style>
-        /* === INLINE HERO BACKGROUND FIX === */
-        .hero-bg-bottom {
-            z-index: 0;
-            background-image: url('{{ asset("img/BG.png") }}');
-            opacity: 0.95;
-            mix-blend-mode: normal;
-            -webkit-filter: blur(50px);
-            filter: blur(50px);
-            position: absolute;
-            inset: 0;
-            background-size: 200% auto;
-            background-position: 0% center;
-            background-repeat: repeat-x;
-            animation: pan 6s linear infinite;
-        }
-        
-        .hero-bg-top {
-            z-index: 1;
-            background-image: url('{{ asset("img/BG2.png") }}');
-            opacity: 0.35;
-            mix-blend-mode: normal;
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-        
-        .section-footer .footer-bg-bottom {
-            z-index: 0;
-            background-image: url('{{ asset("img/Footer.png") }}');
-            opacity: 0.95;
-            mix-blend-mode: normal;
-            -webkit-filter: blur(150px);
-            filter: blur(150px);
-            position: absolute;
-            inset: 0;
-            background-size: 600% auto;
-            background-position: 700%;
-            background-repeat: repeat-x;
-            animation: pan 20s linear infinite;
-        }
-        
-        .section-footer .footer-bg-top {
-            z-index: 1;
-            background-image: url('{{ asset("img/B.png") }}');
-            opacity: 0.35;
-            mix-blend-mode: normal;
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-    </style>
 </head>
 <body>
 

@@ -1,33 +1,53 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+/**
+ * Admin Login Page  
+ * Login page untuk admin tracking system
+ */
 
 session_start();
-include __DIR__ . '/db.php';
+require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/helpers.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+// Redirect if already logged in
+if (isset($_SESSION['admin'])) {
+    redirectTo('admin_dashboard.php');
+}
 
-    // PENTING: Cek dulu koneksi
-    if ($conn->connect_error) {
-        die("Koneksi ke db.php GAGAL: " . $conn->connect_error);
-    }
+$errorMessage = '';
 
-    // Gunakan prepared statement untuk keamanan
-    $stmt = $conn->prepare("SELECT * FROM admin WHERE username = ? AND password = MD5(?)");
-    $stmt->bind_param("ss", $username, $password);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result && $result->num_rows === 1) {
-        $_SESSION['admin'] = $username;
-        header('Location: admin_dashboard.php');
-        exit();
+// Handle login form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = sanitizeInput($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
+
+    // Validate inputs
+    if (!isNotEmpty($username) || !isNotEmpty($password)) {
+        $errorMessage = 'Username dan password harus diisi.';
     } else {
-        $error = "Username atau password salah.";
+        // Check database connection
+        if ($conn->connect_error) {
+            die("Database connection failed: " . $conn->connect_error);
+        }
+
+        // Authenticate admin
+        // NOTE: MD5 digunakan untuk backward compatibility
+        // Idealnya gunakan password_hash() dan password_verify()
+        $stmt = $conn->prepare("SELECT username FROM admin WHERE username = ? AND password = MD5(?)");
+        $stmt->bind_param("ss", $username, $password);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result && $result->num_rows === 1) {
+            // Login successful
+            $_SESSION['admin'] = $username;
+            $stmt->close();
+            redirectTo('admin_dashboard.php');
+        } else {
+            $errorMessage = 'Username atau password salah.';
+        }
+        
+        $stmt->close();
     }
-    $stmt->close();
 }
 ?>
 <!DOCTYPE html>
@@ -36,176 +56,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - Studio Tigapagi</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-image: url('../img/Cover 1.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            position: relative;
-        }
-        
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1;
-        }
-        
-        .login-container {
-            position: relative;
-            z-index: 2;
-            background: rgba(30, 30, 30, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 50px 60px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 450px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .login-container h2 {
-            text-align: center;
-            color: #ffffff;
-            margin-bottom: 10px;
-            font-size: 28px;
-            font-weight: 600;
-        }
-        
-        .subtitle {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 40px;
-            font-size: 14px;
-        }
-        
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 12px;
-            color: #ffffff;
-            font-weight: 500;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-        }
-        
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 16px 20px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            font-size: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-        
-        input[type="text"]::placeholder,
-        input[type="password"]::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-        
-        input[type="text"]:focus,
-        input[type="password"]:focus {
-            border-color: #00ff88;
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
-        }
-        
-        button {
-            width: 100%;
-            padding: 16px;
-            background: #00ff88;
-            color: #000;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 10px;
-        }
-        
-        button:hover {
-            background: #00dd77;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.3);
-        }
-        
-        button:active {
-            transform: translateY(0);
-        }
-        
-        .error {
-            background: rgba(255, 77, 77, 0.15);
-            color: #ff6b6b;
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            text-align: center;
-            border: 1px solid rgba(255, 77, 77, 0.3);
-            font-size: 14px;
-        }
-        
-        .client-link {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .client-link a {
-            color: #00ff88;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .client-link a:hover {
-            color: #00dd77;
-            text-decoration: underline;
-        }
-        
-        @media (max-width: 768px) {
-            .login-container {
-                padding: 40px 30px;
-                margin: 20px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../css/tracking/admin_login.css">
 </head>
 <body>
     <div class="login-container">
         <h2>Admin Login</h2>
         <p class="subtitle">Studio Tigapagi Tracking System</p>
         
-        <?php if (!empty($error)): ?>
-            <div class="error"><?= htmlspecialchars($error) ?></div>
-        <?php endif; ?>
+        <?= renderErrorMessage($errorMessage) ?>
         
         <form method="post">
             <div class="form-group">
