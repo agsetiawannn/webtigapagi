@@ -6,7 +6,8 @@
 <title>Tigapagi</title>
     <link rel="stylesheet" href="{{ asset('css/main.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/index/index.css') }}?v={{ time() }}">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self';">
+    <!-- CSP DISABLED FOR INSPECT -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self';"> -->
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -112,6 +113,7 @@
         <div class="footer-content">
             <!-- Left Side -->
             <div class="footer-left">
+                <div class="footer-divider"></div>
                 <div class="footer-section">
                     <h4 class="footer-section-title">Our Social Media</h4>
                     <div class="footer-socials">
@@ -120,33 +122,37 @@
                             <span>@studio.tigapagi</span>
                         </div>
                         <div class="social-item">
-                            <img src="{{ asset('img/T.png') }}" alt="TikTok">
+                            <img src="{{ asset('img/TT.png') }}" alt="TikTok">
                             <span>@studio.tigapagi</span>
                         </div>
                         <div class="social-item">
-                            <img src="{{ asset('img/TT.png') }}" alt="Twitter">
+                            <img src="{{ asset('img/T.png') }}" alt="Threads">
                             <span>@studio.tigapagi</span>
                         </div>
                     </div>
                 </div>
 
+                <div class="footer-divider"></div>
+
                 <!-- Contact Info Row Below Social Media -->
                 <div class="footer-contact-row">
                     <div class="footer-contact-left">
                         <div class="contact-item">
-                            <h4>Email</h4>
+                            <h4>EMAIL</h4>
                             <p>produksitigapagi@gmail.com</p>
                         </div>
                         <div class="contact-item">
-                            <h4>Contact</h4>
+                            <h4>CONTACT</h4>
                             <p>0896-3889-3601 - Felix</p>
                         </div>
                     </div>
                     <div class="footer-contact-right">
-                        <h4 class="footer-section-title">Bali</h4>
+                        <h4 class="footer-section-title">HEAD OFFICE</h4>
                         <p class="footer-location-text">Jl. Danau Tamblingan No.226, Sanur, Denpasar Selatan, Kota Denpasar, Bali</p>
                     </div>
                 </div>
+
+                <div class="footer-divider"></div>
             </div>
 
             <!-- Middle: Empty for spacing -->
@@ -155,26 +161,33 @@
 
             <!-- Right Side: Logo -->
             <div class="footer-right">
-                <div class="footer-logo">
-                    <img src="{{ asset('img/TP.png') }}" alt="Studio Tigapagi Logo">
+                <div class="footer-logos-container">
+                    <div class="footer-logo">
+                        <img src="{{ asset('img/TP.png') }}" alt="Studio Tigapagi Logo">
+                    </div>
+                    <div class="footer-tagline">
+                        <img src="{{ asset('img/worth.svg') }}" alt="Make it Worth" class="tagline-img">
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Footer Bottom -->
         <div class="footer-bottom">
-            <div class="footer-bottom-left">
+            <div class="footer-bottom-content">
                 <a href="#" class="footer-link">Privacy Policy</a>
                 <span class="footer-link-text">Daze</span>
                 <span class="footer-link-text">Setiawan</span>
             </div>
-            <div class="footer-bottom-right">
+            <div class="footer-copyright-container">
                 <span class="footer-copyright">©Studio Tigapagi 2025</span>
             </div>
         </div>
     </div>
 </footer>
 
+<!-- SECURITY SCRIPTS DISABLED FOR INSPECT -->
+<!--
 <script>
 // Disable right-click context menu
 document.addEventListener('contextmenu', function(e) {
@@ -216,6 +229,7 @@ console.log = function() {};
 console.warn = function() {};
 console.error = function() {};
 </script>
+-->
 
 <script>
 function toggleMenu(){

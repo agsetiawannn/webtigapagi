@@ -1,6 +1,8 @@
 <!-- CARA MEMBUAT CODE SECURE / TIDAK BISA DI-INSPECT -->
+<!-- ====== SECURITY FEATURES DISABLED TEMPORARILY ====== -->
 
 <!-- 1. DISABLE RIGHT-CLICK & DEVELOPER TOOLS -->
+<!-- DISABLED
 <script>
 // Disable right-click
 document.addEventListener('contextmenu', function(e) {
@@ -21,8 +23,10 @@ document.addEventListener('keydown', function(e) {
     }
 });
 </script>
+-->
 
 <!-- 2. DETECT DEVELOPER TOOLS & BLOCK PAGE -->
+<!-- DISABLED
 <script>
 let devtools = { open: false, orientation: null };
 
@@ -41,6 +45,7 @@ setInterval(function() {
     }
 }, 500);
 </script>
+-->
 
 <!-- 3. MINIFY & OBFUSCATE CODE (Gunakan Tools) -->
 <!-- - UglifyJS
@@ -49,6 +54,7 @@ setInterval(function() {
     - Google Closure Compiler -->
 
 <!-- 4. DISABLE COPY-PASTE -->
+<!-- DISABLED
 <script>
 document.addEventListener('copy', function(e) {
     e.preventDefault();
@@ -61,8 +67,10 @@ document.addEventListener('cut', function(e) {
     return false;
 });
 </script>
+-->
 
 <!-- 5. HIDE CONSOLE LOGS -->
+<!-- DISABLED
 <script>
 // Override console methods
 const noop = () => {};
@@ -71,15 +79,19 @@ console.warn = noop;
 console.error = noop;
 console.debug = noop;
 </script>
+-->
 
 <!-- 6. DETECT DEBUGGER & BLOCK -->
+<!-- DISABLED
 <script>
 setInterval(function() {
     debugger;
 }, 1000);
 </script>
+-->
 
 <!-- 7. ENKRIPSI DATA SENSITIVE -->
+<!-- DISABLED
 <script>
 // Jangan simpan data sensitive di client-side
 // Gunakan backend untuk proses sensitive
@@ -98,16 +110,20 @@ function deobfuscateEmail(encoded) {
     return atob(encoded); // Base64 decoding
 }
 </script>
+-->
 
 <!-- 8. GUNAKAN CONTENT SECURITY POLICY (CSP) -->
 <!-- Di file header atau .htaccess -->
 <!-- Meta tag example: -->
+<!-- DISABLED
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline';">
+-->
 
 <!-- 9. DISABLE SOURCE MAPS DI PRODUCTION -->
 <!-- Jangan build dengan source maps di production -->
 
 <!-- 10. SERVICE WORKER UNTUK CACHING & PROTECTION -->
+<!-- DISABLED
 <script>
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
@@ -115,6 +131,7 @@ if ('serviceWorker' in navigator) {
         .catch(error => console.error('SW registration failed'));
 }
 </script>
+-->
 
 <!--
 CATATAN PENTING:

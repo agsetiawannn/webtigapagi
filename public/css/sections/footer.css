@@ -9,6 +9,15 @@
     flex-direction: column;
 }
 
+/* === FOOTER DIVIDER === */
+.footer-divider {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 0;
+    display: none; /* Hidden on desktop */
+}
+
 /* === GRADASI FOOTER === */
 .footer-gradient-top {
     position: absolute;
@@ -142,6 +151,7 @@
     font-weight: 600;
     margin: 0;
     letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 .section-footer .contact-item p {
@@ -177,6 +187,13 @@
     margin-right: 200px;
 }
 
+.section-footer .footer-logos-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
 .section-footer .footer-logo {
     display: flex;
     align-items: center;
@@ -190,6 +207,18 @@
     border-radius: 50%;
 }
 
+.section-footer .footer-tagline {
+    display: none; /* Hidden on desktop */
+    align-items: center;
+    justify-content: center;
+}
+
+.section-footer .tagline-img {
+    height: 35px;
+    width: auto;
+    object-fit: contain;
+}
+
 /* === FOOTER BOTTOM === */
 .section-footer .footer-bottom {
     position: relative;
@@ -198,11 +227,11 @@
     justify-content: space-between;
     align-items: center;
     padding: 30px 100px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 0;
     gap: 40px;
 }
 
-.section-footer .footer-bottom-left {
+.section-footer .footer-bottom-content {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -220,6 +249,11 @@
     font-size: 14px;
     color: rgba(255, 255, 255, 0.85);
     white-space: nowrap;
+}
+
+.section-footer .footer-copyright-container {
+    display: flex;
+    align-items: center;
 }
 
 .section-footer .footer-bottom-right {
@@ -249,18 +283,32 @@
         width: 180px;
         height: 180px;
     }
+    .section-footer .tagline-img {
+        height: 45px;
+    }
 }
 
 @media (max-width: 768px) {
     .section-footer {
         min-height: auto;
     }
+    
+    .footer-divider {
+        display: block;
+        margin: 25px 0;
+    }
+    
     .section-footer .footer-content {
         padding: 40px 20px;
         min-height: auto;
         flex-direction: column;
         gap: 40px;
     }
+    
+    .section-footer .footer-left {
+        gap: 0;
+    }
+    
     .section-footer .footer-socials {
         gap: 30px;
         width: 100%;
@@ -271,24 +319,39 @@
         flex-direction: column;
         gap: 25px;
     }
+    .section-footer .footer-logos-container {
+        flex-direction: row;
+        gap: 30px;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
     .section-footer .footer-logo img {
         width: 150px;
         height: 150px;
     }
+    .section-footer .footer-tagline {
+        display: flex;
+    }
+    .section-footer .tagline-img {
+        height: 50px;
+    }
     .section-footer .footer-right {
         align-items: center;
         margin-right: 0;
+        width: 100%;
     }
     .section-footer .footer-bottom {
         padding: 20px;
-        flex-direction: column;
+        flex-direction: row;
+        justify-content: space-between;
         gap: 15px;
-        align-items: flex-start;
+        align-items: center;
     }
-    .section-footer .footer-bottom-left {
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
+    .section-footer .footer-bottom-content {
+        flex-direction: row;
+        gap: 15px;
+        align-items: center;
     }
 }
 
@@ -297,18 +360,26 @@
         min-height: auto;
     }
     
+    .footer-divider {
+        display: block;
+        margin: 20px 0;
+    }
+    
     .section-footer .footer-content {
         padding: 30px 16px;
         gap: 30px;
     }
     
     .section-footer .footer-left {
-        gap: 30px;
+        gap: 0;
     }
     
     .section-footer .footer-section-title {
         font-size: 15px;
+        font-weight: 700;
         margin: 0 0 8px 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
     
     .section-footer .footer-socials {
@@ -337,6 +408,9 @@
     
     .section-footer .contact-item h4 {
         font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
     
     .section-footer .contact-item p {
@@ -348,18 +422,38 @@
         line-height: 1.5;
     }
     
+    .section-footer .footer-logos-container {
+        flex-direction: row;
+        gap: 20px;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
     .section-footer .footer-logo img {
         width: 120px;
         height: 120px;
     }
     
+    .section-footer .footer-tagline {
+        display: flex;
+    }
+    
+    .section-footer .tagline-img {
+        height: 40px;
+    }
+    
     .section-footer .footer-bottom {
         padding: 16px;
         gap: 12px;
+        flex-direction: column;
+        align-items: center;
     }
     
-    .section-footer .footer-bottom-left {
-        gap: 8px;
+    .section-footer .footer-bottom-content {
+        gap: 10px;
+        flex-direction: row;
+        justify-content: center;
     }
     
     .section-footer .footer-link,

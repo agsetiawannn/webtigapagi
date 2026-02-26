@@ -32,7 +32,12 @@ body::before {
 .header-left h1 { font-size: 48px; font-weight: 700; margin: 0 0 8px 0; color: #fff; letter-spacing: -0.5px; }
 .header-left p { font-size: 17px; color: rgba(255, 255, 255, 0.8); margin: 0; }
 .header-right { display: flex; align-items: center; }
-.header-right .logo-img { height: 50px; width: auto; }
+.header-right .logo-img { 
+    height: 50px; 
+    width: 50px; 
+    border-radius: 50%; 
+    object-fit: cover;
+}
 
 /* PROGRESS TABLE */
 .progress-table-container { background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(10px); border-radius: 16px; overflow: hidden; border: 1.5px solid rgba(255, 255, 255, 0.2); margin-bottom: 30px; }
@@ -205,6 +210,9 @@ body::before {
     /* Header Right - Adjust logo */
     .header-right .logo-img {
         height: 35px;
+        width: 35px;
+        border-radius: 50%;
+        object-fit: cover;
     }
 
     /* Progress Table */
@@ -293,6 +301,9 @@ body::before {
 
     .header-right .logo-img {
         height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        object-fit: cover;
     }
 
     .progress-table th,
