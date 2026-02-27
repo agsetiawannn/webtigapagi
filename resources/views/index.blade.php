@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tigapagi</title>
-    <link rel="stylesheet" href="{{ asset('css/main.css') }}?v={{ time() }}">
-    <link rel="stylesheet" href="{{ asset('css/index/index.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/index/index.css') }}">
     <!-- CSP DISABLED FOR INSPECT -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self';"> -->
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -22,8 +22,8 @@
 
     <div class="nav-menu-container" id="navMenu">
         <a href="{{ url('/') }}">Home</a>
-        <a href="#">Work</a>
-        <a href="#">Team</a>
+        <a href="{{ url('/work') }}">Work</a>
+        <a href="{{ url('/team') }}">Team</a>
         <a href="{{ url('/tracking/login.php') }}">Tracking</a>
     </div>
 
@@ -77,7 +77,7 @@
 
 <section class="section-clients" aria-labelledby="clientsTitle">
     <div class="clients-inner">
-        <h2 id="clientsTitle">Our <strong>clients</strong></h2>
+        <h2 id="clientsTitle">Our <strong>Clients</strong></h2>
         <div class="clients-content">
             <img src="{{ asset('img/client.png') }}" alt="Our Clients" class="clients-image">
         </div>
@@ -242,6 +242,48 @@ function toggleMenu(){
     const expanded = navMenu.classList.contains('active');
     menuBtn.setAttribute('aria-expanded', expanded);
 }
+
+// Page Transition Animation
+document.addEventListener('DOMContentLoaded', function() {
+    // Restore scroll position if needed
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    
+    const links = document.querySelectorAll('a[href^="{{ url('/') }}"], a[href^="/"]');
+    
+    links.forEach(link => {
+        // Skip external links and anchors
+        if (link.hostname !== window.location.hostname || 
+            link.getAttribute('target') === '_blank' ||
+            link.getAttribute('href').startsWith('#')) {
+            return;
+        }
+        
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            
+            // Only animate for internal navigation
+            if (href && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+                e.preventDefault();
+                
+                // Close menu if open
+                const navMenu = document.getElementById('navMenu');
+                const menuBtn = document.getElementById('menuBtn');
+                if (navMenu && navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    menuBtn.classList.remove('active');
+                }
+                
+                document.body.classList.add('page-exit');
+                
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 300);
+            }
+        });
+    });
+});
 </script>
 
 </body>

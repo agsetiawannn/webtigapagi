@@ -21,8 +21,9 @@
 
     <div class="nav-menu-container" id="navMenu">
         <a href="{{ url('/') }}">Home</a>
-        <a href="#Work">Work</a>
-        <a href="#Clients">Clients</a>
+        <a href="{{ url('/work') }}">Work</a>
+        <a href="{{ url('/team') }}">Team</a>
+        <a href="{{ url('/tracking/login.php') }}">Tracking</a>
     </div>
 
     <button aria-label="Menu" onclick="toggleMenu()" class="btn--icon" id="menuBtn">
@@ -113,6 +114,44 @@ function toggleMenu(){
     const expanded = navMenu.classList.contains('active');
     menuBtn.setAttribute('aria-expanded', expanded);
 }
+
+// Page Transition Animation
+document.addEventListener('DOMContentLoaded', function() {
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    
+    const links = document.querySelectorAll('a[href^="{{ url('/') }}"], a[href^="/"]');
+    
+    links.forEach(link => {
+        if (link.hostname !== window.location.hostname || 
+            link.getAttribute('target') === '_blank' ||
+            link.getAttribute('href').startsWith('#')) {
+            return;
+        }
+        
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            
+            if (href && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+                e.preventDefault();
+                
+                const navMenu = document.getElementById('navMenu');
+                const menuBtn = document.getElementById('menuBtn');
+                if (navMenu && navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    menuBtn.classList.remove('active');
+                }
+                
+                document.body.classList.add('page-exit');
+                
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 300);
+            }
+        });
+    });
+});
 </script>
 
 </body>

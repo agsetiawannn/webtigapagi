@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="30">
     <title>Admin - Manage Contacts | Tigapagi</title>
-    <link rel="stylesheet" href="{{ asset('css/admin/contacts.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/contacts.css') }}">
 </head>
 <body>
     <div class="container">

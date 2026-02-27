@@ -26,27 +26,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Check database connection
         if ($conn->connect_error) {
-            die("Database connection failed: " . $conn->connect_error);
-        }
-
-        // Authenticate admin
-        // NOTE: MD5 digunakan untuk backward compatibility
-        // Idealnya gunakan password_hash() dan password_verify()
-        $stmt = $conn->prepare("SELECT username FROM admin WHERE username = ? AND password = MD5(?)");
-        $stmt->bind_param("ss", $username, $password);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result && $result->num_rows === 1) {
-            // Login successful
-            $_SESSION['admin'] = $username;
-            $stmt->close();
-            redirectTo('admin_dashboard.php');
+            error_log("Database connection failed");
+            $errorMessage = 'Sistem sedang dalam maintenance.';
         } else {
-            $errorMessage = 'Username atau password salah.';
+            // Authenticate admin with secure password check
+            $stmt = $conn->prepare("SELECT username, password FROM admin WHERE username = ? LIMIT 1");
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result && $result->num_rows === 1) {
+                $admin = $result->fetch_assoc();
+                $stored_password = $admin['password'];
+                
+                // Check if password is bcrypt or MD5 (migration support)
+                if (password_verify($password, $stored_password)) {
+                    // Bcrypt password - secure ✓
+                    $_SESSION['admin'] = $username;
+                    $_SESSION['admin_secure'] = true;
+                    $stmt->close();
+                    redirectTo('admin_dashboard.php');
+                } elseif ($stored_password === md5($password)) {
+                    // Old MD5 password detected - auto-upgrade to bcrypt
+                    $new_hash = password_hash($password, PASSWORD_BCRYPT);
+                    $update_stmt = $conn->prepare("UPDATE admin SET password = ? WHERE username = ?");
+                    $update_stmt->bind_param("ss", $new_hash, $username);
+                    $update_stmt->execute();
+                    $update_stmt->close();
+                    
+                    $_SESSION['admin'] = $username;
+                    $_SESSION['admin_secure'] = true;
+                    $_SESSION['password_upgraded'] = true;
+                    $stmt->close();
+                    redirectTo('admin_dashboard.php');
+                } else {
+                    $errorMessage = 'Username atau password salah.';
+                }
+            } else {
+                $errorMessage = 'Username atau password salah.';
+            }
+            
+            $stmt->close();
         }
-        
-        $stmt->close();
     }
 }
 ?>
