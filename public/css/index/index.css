@@ -9,13 +9,13 @@
     background-image: url('../../img/BG.png');
     opacity: 0.95;
     mix-blend-mode: normal;
-    -webkit-filter: blur(50px);
-    filter: blur(50px);
     position: absolute;
     inset: 0;
     background-size: 200% auto;
     background-position: 0% center;
     background-repeat: repeat-x;
+    -webkit-filter: blur(50px);
+    filter: blur(50px);
     animation: pan 6s linear infinite;
 }
 
@@ -37,13 +37,13 @@
     background-image: url('../../img/Footer.png');
     opacity: 0.95;
     mix-blend-mode: normal;
-    -webkit-filter: blur(150px);
-    filter: blur(150px);
     position: absolute;
     inset: 0;
     background-size: 600% auto;
     background-position: 700%;
     background-repeat: repeat-x;
+    -webkit-filter: blur(150px);
+    filter: blur(150px);
     animation: pan 20s linear infinite;
 }
 

@@ -6,6 +6,7 @@
 <title>Tigapagi</title>
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('css/index/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/loader.css') }}">
     <!-- CSP DISABLED FOR INSPECT -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self';"> -->
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -13,6 +14,8 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
 </head>
 <body>
+
+@include('partials.loader')
 
 <div class="logo-top-left" >
     <img class="logo-img" src="{{ asset('img/tb.png') }}">

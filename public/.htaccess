@@ -9,10 +9,6 @@
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Handle X-XSRF-Token Header
-    RewriteCond %{HTTP:x-xsrf-token} .
-    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
-
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
@@ -24,52 +20,16 @@
     RewriteRule ^ index.php [L]
 </IfModule>
 
-# ============================================
-# SECURITY HEADERS
-# ============================================
-
-<IfModule mod_headers.c>
-    # Prevent clickjacking
-    Header always set X-Frame-Options "SAMEORIGIN"
-    
-    # Prevent MIME type sniffing
-    Header always set X-Content-Type-Options "nosniff"
-    
-    # Enable XSS protection
-    Header always set X-XSS-Protection "1; mode=block"
-    
-    # Referrer Policy
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    
-    # Remove X-Powered-By header
-    Header unset X-Powered-By
-</IfModule>
-
-# ============================================
-# PROTECT SENSITIVE FILES
-# ============================================
-
-# Block access to .env files
-<FilesMatch "^\.env">
-    Order allow,deny
-    Deny from all
-</FilesMatch>
-
-# Block access to test files only (setup files have their own security checks)
-<FilesMatch "(test_connection|comprehensive_test)\.php$">
-    Order allow,deny
-    Deny from all
-</FilesMatch>
-
-# Note: setup_database.php and create_new_admin.php are protected by 
-# SETUP_ENABLED and SETUP_KEY checks in the PHP code itself
-
-# Block access to git and config files
-<FilesMatch "^\.git|composer\.(json|lock)|package(-lock)?\.json|vite\.config\.js">
-    Order allow,deny
-    Deny from all
-</FilesMatch>
-
 # Disable directory listing
 Options -Indexes
+
+# Block access to .env files
+<Files ".env">
+    Require all denied
+</Files>
+
+# Block access to sensitive files
+<FilesMatch "\.(env|git|htaccess|htpasswd)$">
+    Require all denied
+</FilesMatch>
 
