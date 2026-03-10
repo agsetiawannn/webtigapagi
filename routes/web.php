@@ -3,25 +3,22 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
 
+// React SPA - All frontend routes
 Route::get('/', function () {
-    return view('index');
+    return view('app');
 });
 
-Route::get('/clients', function () {
-    return view('client');
-})->name('client');
-
-Route::get('/tracking', function () {
-    return view('tracking');
-})->name('tracking');
-
 Route::get('/work', function () {
-    return view('work');
+    return view('app');
 })->name('work');
 
 Route::get('/team', function () {
-    return view('team');
+    return view('app');
 })->name('team');
+
+Route::get('/clients', function () {
+    return view('app');
+})->name('client');
 
 // Tracking System Routes (Native PHP) - Without CSRF Protection
 Route::any('/login.php', function () {
@@ -64,8 +61,8 @@ Route::any('/test_db.php', function () {
     exit;
 })->withoutMiddleware(['web']);
 
-// Contact Routes
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+// API Routes for React
+Route::post('/api/contact', [ContactController::class, 'store'])->name('contact.store');
 
 // Admin Contact Management Routes
 Route::get('/admin/contacts', [ContactController::class, 'index'])->name('admin.contacts');
