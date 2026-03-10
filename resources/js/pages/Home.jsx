@@ -110,14 +110,7 @@ function Home() {
             {services.map((service, index) => (
               <div
                 key={index}
-                className="
-                  border border-white/30
-                  rounded-xl
-                  px-6 py-4
-                  text-center
-                  hover:border-white/60
-                  transition-all duration-300
-                "
+                className="border border-white/30 rounded-xl px-6 py-4 text-center hover:border-white/60 transition-all duration-300"
               >
                 <span className="text-white font-medium text-sm md:text-base">{service}</span>
               </div>
@@ -147,17 +140,11 @@ function Home() {
             Our <strong className="font-semibold">Clients</strong>
           </h2>
           
-          {/* Client Images Container - using grid for smooth crossfade */}
+          {/* Client Images Container */}
           <div className="relative">
             {/* Default client.png */}
             <div 
-              className={`
-                transition-all duration-500 ease-in-out
-                ${showClientWrap 
-                  ? 'opacity-0 scale-95 absolute inset-0 pointer-events-none' 
-                  : 'opacity-100 scale-100 relative'
-                }
-              `}
+              className={`transition-all duration-500 ease-in-out ${showClientWrap ? 'opacity-0 scale-95 absolute inset-0 pointer-events-none' : 'opacity-100 scale-100 relative'}`}
             >
               <img
                 src="/img/client.png"
@@ -168,13 +155,7 @@ function Home() {
             
             {/* Expanded clientwrap.png */}
             <div 
-              className={`
-                transition-all duration-500 ease-in-out
-                ${showClientWrap 
-                  ? 'opacity-100 scale-100 relative' 
-                  : 'opacity-0 scale-95 absolute inset-0 pointer-events-none'
-                }
-              `}
+              className={`transition-all duration-500 ease-in-out ${showClientWrap ? 'opacity-100 scale-100 relative' : 'opacity-0 scale-95 absolute inset-0 pointer-events-none'}`}
             >
               <img
                 src="/img/ClientWrap.png"
@@ -183,7 +164,7 @@ function Home() {
               />
             </div>
           </div>
-        
+          
           <div className="mt-12 flex justify-center">
             <button
               onClick={() => setShowClientWrap(!showClientWrap)}
