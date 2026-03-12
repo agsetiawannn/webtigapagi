@@ -5,9 +5,9 @@ import App from './AppRouter';
 import '../css/app.css';
 
 ReactDOM.createRoot(document.getElementById('app')).render(
-  <React.StrictMode>
+<React.StrictMode>
     <BrowserRouter>
-      <App />
+    <App />
     </BrowserRouter>
-  </React.StrictMode>
+</React.StrictMode>
 );

@@ -4,15 +4,15 @@ import Header from './Header';
 import Footer from './Footer';
 
 function Layout() {
-  return (
+return (
     <div className="min-h-screen bg-black text-white font-sans">
-      <Header />
-      <main>
+    <Header />
+    <main>
         <Outlet />
-      </main>
-      <Footer />
+    </main>
+    <Footer />
     </div>
-  );
+);
 }
 
 export default Layout;

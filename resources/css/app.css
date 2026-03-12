@@ -30,54 +30,54 @@ header button:active {
 
 /* Loader animations */
 @keyframes float1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(30px, -40px) scale(1.05); }
-  50% { transform: translate(-20px, 20px) scale(0.95); }
-  75% { transform: translate(40px, 30px) scale(1.02); }
+0%, 100% { transform: translate(0, 0) scale(1); }
+25% { transform: translate(30px, -40px) scale(1.05); }
+50% { transform: translate(-20px, 20px) scale(0.95); }
+75% { transform: translate(40px, 30px) scale(1.02); }
 }
 
 @keyframes float2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(-40px, 30px) scale(1.03); }
-  66% { transform: translate(30px, -40px) scale(0.97); }
+0%, 100% { transform: translate(0, 0) scale(1); }
+33% { transform: translate(-40px, 30px) scale(1.03); }
+66% { transform: translate(30px, -40px) scale(0.97); }
 }
 
 @keyframes float3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(40px, 40px) scale(1.05); }
+0%, 100% { transform: translate(0, 0) scale(1); }
+50% { transform: translate(40px, 40px) scale(1.05); }
 }
 
 @keyframes float4 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(-30px, 30px) scale(1.02); }
-  75% { transform: translate(20px, -20px) scale(0.98); }
+0%, 100% { transform: translate(0, 0) scale(1); }
+25% { transform: translate(-30px, 30px) scale(1.02); }
+75% { transform: translate(20px, -20px) scale(0.98); }
 }
 
 @keyframes float5 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  40% { transform: translate(50px, -30px) scale(1.04); }
-  80% { transform: translate(-30px, 40px) scale(0.96); }
+0%, 100% { transform: translate(0, 0) scale(1); }
+40% { transform: translate(50px, -30px) scale(1.04); }
+80% { transform: translate(-30px, 40px) scale(0.96); }
 }
 
 @keyframes float6 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-40px, -30px) scale(1.03); }
+0%, 100% { transform: translate(0, 0) scale(1); }
+50% { transform: translate(-40px, -30px) scale(1.03); }
 }
 
 @keyframes float7 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, 40px) scale(1.02); }
-  66% { transform: translate(-40px, -20px) scale(0.98); }
+0%, 100% { transform: translate(0, 0) scale(1); }
+33% { transform: translate(30px, 40px) scale(1.02); }
+66% { transform: translate(-40px, -20px) scale(0.98); }
 }
 
 @keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; visibility: hidden; }
+from { opacity: 1; }
+to { opacity: 0; visibility: hidden; }
 }
 
 @keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+0% { transform: translateX(0); }
+100% { transform: translateX(-50%); }
 }
 
 .animate-float1 { animation: float1 8s infinite ease-in-out; }
@@ -90,18 +90,18 @@ header button:active {
 .animate-scroll { animation: scroll 20s linear infinite; }
 
 .loader-fade-out {
-  animation: fadeOut 0.8s ease-out forwards;
+animation: fadeOut 0.8s ease-out forwards;
 }
 
 /* Hero background pan animation - GPU accelerated */
 @keyframes panSmooth {
-  0% { transform: translateX(0) translateZ(0); }
-  100% { transform: translateX(-50%) translateZ(0); }
+0% { transform: translateX(0) translateZ(0); }
+100% { transform: translateX(-50%) translateZ(0); }
 }
 
 .animate-pan-smooth {
-  animation: panSmooth 10s linear infinite;
-  will-change: transform;
-  backface-visibility: hidden;
+animation: panSmooth 10s linear infinite;
+will-change: transform;
+backface-visibility: hidden;
 }
 
