@@ -51,7 +51,7 @@ class ContactController extends Controller
             Log::error('Failed to send contact notification email: ' . $e->getMessage());
         }
 
-        return redirect()->back()->with('success', 'Your message has been sent successfully!');
+        return response()->json(['message' => 'Your message has been sent successfully!'], 200);
     }
 
     /**

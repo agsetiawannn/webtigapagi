@@ -1,24 +1,14 @@
 <?php
-// Enable error reporting for debugging (disable in production)
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+error_reporting(0);
+ini_set('display_errors', '0');
 
 // Security check
 if (!isset($_GET['key']) || $_GET['key'] !== 'nocturnal0300') {
     die("❌ Invalid key. Use ?key=nocturnal0300");
 }
 
-// Database connection
-$host = '127.0.0.1';
-$user = 'root';
-$pass = '';
-$db = 'tigapagi';
-$port = 3308;
-
-$conn = new mysqli($host, $user, $pass, $db, $port);
-if ($conn->connect_error) {
-    die("❌ Database connection failed: " . $conn->connect_error);
-}
+// Use same DB connection as tracking system
+require_once __DIR__ . '/tracking/db.php';
 
 // Get existing admins
 $existing_admins = [];

@@ -12,6 +12,10 @@ Route::get('/work', function () {
     return view('app');
 })->name('work');
 
+Route::get('/work/{slug}', function () {
+    return view('app');
+})->where('slug', '.*')->name('work.detail');
+
 Route::get('/team', function () {
     return view('app');
 })->name('team');

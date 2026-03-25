@@ -66,7 +66,7 @@ $clients = getAllClients($conn);
     </div>
 
     <div class="nav-buttons">
-        <a href="/tigapagiweb/public/admin/contacts" class="btn-contact">Kelola Kontak</a>
+        <a href="/admin/contacts" class="btn-contact">Kelola Kontak</a>
     </div>
 
     <?= renderErrorMessage($errorMessage) ?>
